@@ -10,8 +10,8 @@ namespace Athena.Mario.Items
     public abstract class Pickup : MonoBehaviour
     {
         [SerializeField]protected bool isEnabled = false;
-        protected float DespawnTime = 30f;
-
+        [SerializeField]protected float _despawnTime = 30f;
+        [SerializeField] protected bool neverDespawn = false;
         private Timer pickupKillTimer=null;
          
 
@@ -25,7 +25,8 @@ namespace Athena.Mario.Items
 
         virtual protected void FixedUpdate()
         {
-            pickupKillTimer?.Tick(Time.deltaTime);
+            if(!neverDespawn)
+                pickupKillTimer?.Tick(Time.deltaTime);
         }
 
 
@@ -35,14 +36,22 @@ namespace Athena.Mario.Items
         virtual public void EnablePickup(bool enable)
         {
             isEnabled = enable;
+            SetDespawnTimer();
+        }
+
+        private void SetDespawnTimer()
+        {
+            if (neverDespawn)
+                return;
             if (pickupKillTimer != null)
-            { 
+            {
                 pickupKillTimer.OnTimerEnd -= PickupExpire;
                 pickupKillTimer = null;
             }
-            pickupKillTimer = new Timer(DespawnTime);
+            pickupKillTimer = new Timer(_despawnTime);
             pickupKillTimer.OnTimerEnd += PickupExpire;
         }
+
         virtual protected void PickupExpire()
         {
             Destroy(gameObject);
