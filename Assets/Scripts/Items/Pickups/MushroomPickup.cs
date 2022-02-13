@@ -20,8 +20,6 @@ namespace Athena.Mario.Items
         private void Awake()
         {
             rb = GetComponentInChildren<Rigidbody2D>();
-            EnablePickup(false);
-            EnablePickup(true);
             
         }
 

@@ -99,7 +99,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 363125823
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 5
   m_Sprite: {fileID: -4016574229998233168, guid: 855dc7396df3c4e49ac4d21234eac5e1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -167,12 +167,12 @@ MonoBehaviour:
   UsedSprite: {fileID: 21300006, guid: 855dc7396df3c4e49ac4d21234eac5e1, type: 3}
   ItemSpawnPoint: {fileID: 3222160253147664490}
   spriteRenderer: {fileID: 3222160254276420020}
-  SpawnedObjRenderer: {fileID: 0}
-  SpawnItemType: 0
+  SpawnItemType: 1
+  Spawnables: {fileID: 11400000, guid: 16d37db2582cacd49afa85e87de44b59, type: 2}
   points: 100
   animator: {fileID: 3813937935020149390}
   coinAnimator: {fileID: 1478213829311084552}
-  pfItem: {fileID: 0}
+  itemSpawnTime: 5
 --- !u!50 &3813937935020149427
 Rigidbody2D:
   serializedVersion: 4
@@ -280,8 +280,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5303345617331064472, guid: 7f8c86daafa109e4eb914cf387514e81, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303345617331064472, guid: 7f8c86daafa109e4eb914cf387514e81, type: 3}
       propertyPath: m_SortingLayer
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5303345617331064472, guid: 7f8c86daafa109e4eb914cf387514e81, type: 3}
       propertyPath: m_SortingOrder

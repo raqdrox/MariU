@@ -7,13 +7,20 @@ using UnityEngine.Events;
 
 namespace Athena.Mario.Items
 {
-    public abstract class Pickup : MonoBehaviour
-    {
+    public abstract class Pickup : MonoBehaviour, ISpawnableItem
+    { 
         [SerializeField]protected bool isEnabled = false;
         [SerializeField]protected float _despawnTime = 30f;
-        [SerializeField] protected bool neverDespawn = false;
+        [SerializeField]protected bool neverDespawn = false;
         private Timer pickupKillTimer=null;
-         
+
+        private bool DoSpawnCycle=true;
+        public bool NeedsSpawnCycle => DoSpawnCycle;
+
+        virtual protected void Awake()
+        {
+            EnablePickup(false);
+        }
 
         virtual protected void OnTriggerEnter2D(Collider2D other)
         {
@@ -57,5 +64,12 @@ namespace Athena.Mario.Items
             Destroy(gameObject);
         }
 
+        public void OnStartSpawn() { }
+
+
+        public void OnEndSpawn()
+        {
+            EnablePickup(true);
+        }
     }
 }

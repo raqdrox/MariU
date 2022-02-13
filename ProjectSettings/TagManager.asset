@@ -47,9 +47,9 @@ TagManager:
   - name: Environment
     uniqueID: 1824215219
     locked: 0
-  - name: Interactables
-    uniqueID: 363125823
-    locked: 0
   - name: Entities
     uniqueID: 2141596499
+    locked: 0
+  - name: Interactables
+    uniqueID: 363125823
     locked: 0

@@ -17,7 +17,7 @@ PrefabInstance:
       objectReference: {fileID: 349823833441268365, guid: 855dc7396df3c4e49ac4d21234eac5e1, type: 3}
     - target: {fileID: 3222160254276420020, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
       propertyPath: m_SortingLayer
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3222160254276420020, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
       propertyPath: m_SortingOrder
@@ -95,13 +95,17 @@ PrefabInstance:
       propertyPath: MaxUses
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 3813937935020149426, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
+      propertyPath: SpawnItemType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9040009667720405369, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 9040009667720405371, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
       propertyPath: m_SortingLayer
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9040009667720405371, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
       propertyPath: m_SortingLayerID

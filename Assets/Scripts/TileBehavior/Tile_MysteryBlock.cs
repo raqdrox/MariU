@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Athena.Mario.Items;
+using Athena.Mario.Player;
 namespace Athena.Mario.Tiles
 {
-    public enum ItemType
+    public enum MysteryItem
     {
-        ITEM_COIN,
-        ITEM_POWERUP,
-        ITEM_POWERDOWN,
-        ITEM_STAR
+        MYS_COIN,
+        MYS_POWERUP,
+        MYS_LIFE,
+        MYS_POWERDOWN,
+        MYS_STAR,
     }
     public class Tile_MysteryBlock : MonoBehaviour
     {
@@ -20,15 +22,14 @@ namespace Athena.Mario.Tiles
         [SerializeField] Sprite UsedSprite;
         [SerializeField] Transform ItemSpawnPoint;
         [SerializeField] SpriteRenderer spriteRenderer;
-        [SerializeField] SpriteRenderer SpawnedObjRenderer;
 
-        [SerializeField] ItemType SpawnItemType;
+        [SerializeField] MysteryItem SpawnItemType;
+        [SerializeField] SpawnableData Spawnables;
         [SerializeField] int points = 100;
         [SerializeField] Animator animator;
         [SerializeField] Animator coinAnimator;
-        [SerializeField] GameObject pfItem;
-
-        GameObject SpawnedItem = null;
+        [SerializeField] float itemSpawnTime = 5f;
+        GameObject SpawnedObj = null;
         Vector3 blockIdlePos;
 
         private void Awake()
@@ -41,50 +42,80 @@ namespace Athena.Mario.Tiles
             ResetBlockPos();
             if (isCollected)
                 return;
-            if (collision.otherCollider.GetType() == typeof(PolygonCollider2D))
+            if (collision.otherCollider.GetType() == typeof(PolygonCollider2D) && collision.collider.gameObject.GetComponent<PlayerController>()!= null)
             {
-                
+
                 if (collision.relativeVelocity.y > activationPower)
-                    TriggerBlock();
-                
+                    TriggerBlock(collision.collider.gameObject.GetComponent<PlayerController>());
+
             }
         }
 
-        void TriggerBlock()
+        void TriggerBlock(PlayerController plr)
         {
-            print(Uses >= MaxUses);
-            
+
             Uses += 1;
             if (Uses >= MaxUses)
-            { 
+            {
                 SetBlockUsed();
             }
-            
-            if (SpawnItemType==ItemType.ITEM_COIN)
+            animator.SetTrigger("bump");
+            ItemType type=ItemType.ITEM_MUSHROOM;
+            switch (SpawnItemType)
             {
-                animator.SetTrigger("spawn_coin");
-                coinAnimator.transform.position = transform.position;
-                coinAnimator.SetTrigger("coin");
-                print("Coin Collected worth " + points + " Points");
-            }
-            else
-            {
-                SpawnedItem =  Instantiate(pfItem, ItemSpawnPoint.position, ItemSpawnPoint.rotation);
-                SpawnedItem.SetActive(false);
-                SpawnedObjRenderer.sprite = SpawnedItem.GetComponent<IItem>().ItemSprite;
-                animator.SetTrigger("spawn_item");
-                Invoke("EnableSpawnedItem", 1);
+                case MysteryItem.MYS_COIN:
+                    //coinAnimator.transform.position = transform.position;
+                    //coinAnimator.SetTrigger("coin");
+                    type = ItemType.ITEM_COIN;
+                    break;
+                case MysteryItem.MYS_POWERUP:
+                    if (plr.CurrentPlayerState == PlayerStates.MARIO_SMALL)
+                        type = ItemType.ITEM_MUSHROOM;
+                    else
+                        type = ItemType.ITEM_FLOWER;
+                    break;
+                case MysteryItem.MYS_LIFE:
+                    return;
+                    break;
+                case MysteryItem.MYS_POWERDOWN:
+                    return;
+                    break;
+                case MysteryItem.MYS_STAR:
+                    return;
+                    break;
+                default:
+                    break;
             }
             
+            SpawnedObj = Instantiate(Spawnables.GetPrefabFor(type), blockIdlePos, ItemSpawnPoint.rotation);
+            var spawnedItem = SpawnedObj.GetComponent<ISpawnableItem>();
+            spawnedItem.OnStartSpawn();
+            if (spawnedItem.NeedsSpawnCycle)
+            { StartCoroutine(ItemSpawnSequence(SpawnedObj)); }
+        }
+
+    
+
+        IEnumerator ItemSpawnSequence(GameObject spawnedItem)
+        {
+            float currentMovementTime = 0f;
+            while (Vector3.Distance(spawnedItem.transform.position, ItemSpawnPoint.position) > 0)
+            {
+                currentMovementTime += Time.deltaTime;
+                spawnedItem.transform.position = Vector3.Lerp(blockIdlePos, ItemSpawnPoint.position, currentMovementTime / itemSpawnTime);
+
+                //transform.position = Vector3.Lerp(blockIdlePos, ItemSpawnPoint.position, currentMovementTime / itemSpawnTime);//Funny Mistake
+                yield return null;
+            }
+            EnableSpawnedItem();
         }
 
         void EnableSpawnedItem()
         {
-            ResetBlockPos();
-            if (SpawnedItem == null)
+            
+            if (SpawnedObj == null)
                 return;
-            SpawnedItem.SetActive(true);
-            SpawnedItem.GetComponent<IItem>().OnSpawn();
+            SpawnedObj.GetComponent<ISpawnableItem>().OnEndSpawn();
         }
 
         void SetBlockUsed()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,7 +70,7 @@ namespace Athena.Mario.Player
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             playerCollider = GetComponent<EdgeCollider2D>();
-
+            
             if (groundLayers.Count>0)
             {
                 groundMask = 0;
@@ -81,6 +82,10 @@ namespace Athena.Mario.Player
             }
         }
 
+        private void Start()
+        {
+            StateChangeDebug((int)CurrentPlayerState);
+        }
 
         #region Movement + Physics
         private void Update()
@@ -229,6 +234,7 @@ namespace Athena.Mario.Player
                 SetPlayerState(PlayerStates.MARIO_FIRE);
             }
 
+            StateDebugUpdate();
         }
 
 
@@ -236,8 +242,9 @@ namespace Athena.Mario.Player
         public void StateChangeDebug(int stateId)
         {
             SetPlayerState((PlayerStates)stateId);
-            Statetxt.text = ((PlayerStates)stateId).ToString();
+            StateDebugUpdate();
         }
+        public void StateDebugUpdate()=> Statetxt.text = CurrentPlayerState.ToString();
 
 
 
