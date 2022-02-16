@@ -19,8 +19,8 @@ namespace Athena.Mario.Items
 
         virtual protected void Awake()
         {
-            EnablePickup(false);
             rb = GetComponentInChildren<Rigidbody2D>();
+            EnablePickup(false);
         }
 
         virtual protected void OnTriggerEnter2D(Collider2D other)

@@ -28,6 +28,11 @@ namespace Athena.Mario.Items
             //add event stuff
         }
 
+        public void OnAnimEnd()
+        {
+            Destroy(gameObject);
+        }
+
         IEnumerator CoinAnim()
         {
             float currentMovementTime = 0f;

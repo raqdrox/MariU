@@ -677,6 +677,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3813937935020149426, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
+      propertyPath: SpawnItemType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3813937935020149426, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
+      propertyPath: itemSpawnTime
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
 --- !u!4 &463407879 stripped
@@ -1238,7 +1246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &990236010
 Transform:
   m_ObjectHideFlags: 0
@@ -1656,7 +1664,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1220805712
 Transform:
   m_ObjectHideFlags: 0
@@ -5757,14 +5765,14 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 0, y: 1.35}
-  - {x: -0.15, y: 1.5}
-  - {x: -0.4, y: 1.5}
+  - {x: 0, y: 0.35}
+  - {x: -0.15, y: 0.5}
+  - {x: -0.4, y: 0.5}
   - {x: -0.4, y: -0.5}
   - {x: 0.4, y: -0.5}
-  - {x: 0.4, y: 1.5}
-  - {x: 0.15, y: 1.5}
-  - {x: 0, y: 1.35}
+  - {x: 0.4, y: 0.5}
+  - {x: 0.15, y: 0.5}
+  - {x: 0, y: 0.35}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -5803,7 +5811,7 @@ MonoBehaviour:
     m_Bits: 64
   - serializedVersion: 2
     m_Bits: 512
-  CurrentPlayerState: 1
+  CurrentPlayerState: 0
   smallMarioRenderer: {fileID: 990236011}
   bigMarioRenderer: {fileID: 1220805713}
   fireMarioRenderer: {fileID: 402139880}

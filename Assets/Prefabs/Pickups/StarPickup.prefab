@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 243324319425499462}
   - component: {fileID: 243324319425499463}
   - component: {fileID: 243324319425499321}
-  - component: {fileID: 243324319425499322}
+  - component: {fileID: 3974446273932842432}
+  - component: {fileID: 6416117052822172222}
   m_Layer: 7
-  m_Name: MushroomPickup
+  m_Name: StarPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 2141596499
   m_SortingLayer: 3
   m_SortingOrder: -9
-  m_Sprite: {fileID: 21300000, guid: cbe738a6b31804fbfa01d65f850d595b, type: 3}
+  m_Sprite: {fileID: 21300184, guid: cbe738a6b31804fbfa01d65f850d595b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -99,9 +100,9 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 10
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 60
+  m_LinearDrag: 0.24
+  m_AngularDrag: 1.18
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -120,7 +121,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0019636154, y: 0}
+  m_Offset: {x: 0.0011804104, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -131,9 +132,9 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.87432384, y: 1.0000002}
+  m_Size: {x: 0.87487745, y: 1.0000002}
   m_EdgeRadius: 0
---- !u!114 &243324319425499322
+--- !u!114 &3974446273932842432
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,20 +143,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 243324319425499460}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 161bde2c6dec992488db572531392ea8, type: 3}
+  m_Script: {fileID: 11500000, guid: 51934adf962ecee4d838ce7b1d600234, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isEnabled: 0
-  _despawnTime: 10
-  neverDespawn: 1
-  MoveDirection: 1
-  moveSpeed: 3
+  _despawnTime: 30
+  neverDespawn: 0
+  horiMoveDirection: 1
+  vertMove: 0
+  horizontalSpeed: 3
+  verticalSpeed: 8
   DetectLayer:
     serializedVersion: 2
-    m_Bits: 576
-  sideOffset: 0.46
-  topOffset: 0.4
-  bottomOffset: -0.4
+    m_Bits: 832
+  scSideOffset: 0.47
+  scTopOffset: 0.4
+  scBottomOffset: -0.4
+  gcBotOffset: 0.52
+  gcLeftOffset: 0.4
+  gcRightOffset: -0.4
+--- !u!95 &6416117052822172222
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243324319425499460}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 77d80bb90ead3cc43ab3f9558df1fc55, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &243324319715310437
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,7 +225,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0011804104, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -211,5 +236,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.87487745, y: 1}
   m_EdgeRadius: 0

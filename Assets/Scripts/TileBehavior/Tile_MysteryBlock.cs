@@ -81,7 +81,7 @@ namespace Athena.Mario.Tiles
                     return;
                     break;
                 case MysteryItem.MYS_STAR:
-                    return;
+                    type = ItemType.ITEM_STAR;
                     break;
                 default:
                     break;
