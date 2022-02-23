@@ -20,7 +20,7 @@ namespace Athena.Mario.Items
         {
             PlayerController player = picker.GetComponent<PlayerController>();
             player.PowerUp();
-            PickupExpire();
+            OnPickupExpire();
         }
 
         public override void EnablePickup(bool enable)

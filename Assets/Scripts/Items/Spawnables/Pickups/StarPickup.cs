@@ -30,8 +30,9 @@ namespace Athena.Mario.Items
         protected override void PickupPayload(Collider2D picker)
         {
             PlayerController player = picker.GetComponent<PlayerController>();
-            player.PowerUp();
-            PickupExpire();
+            player.SetEffect(PowerEffects.EFFECT_SINV,20f);
+
+            OnPickupExpire();
         }
 
         public override void EnablePickup(bool enable)
@@ -53,8 +54,7 @@ namespace Athena.Mario.Items
             {
                 base.FixedUpdate();
                 HandleSideHit();
-                HandleGroundHit();
-                
+                HandleGroundHit(); 
             }
         }
 

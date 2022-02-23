@@ -17,13 +17,13 @@ namespace Athena.Mario.Items
         private bool DoSpawnCycle=true;
         public bool NeedsSpawnCycle => DoSpawnCycle;
 
-        virtual protected void Awake()
+        protected virtual void Awake()
         {
             rb = GetComponentInChildren<Rigidbody2D>();
             EnablePickup(false);
         }
 
-        virtual protected void OnTriggerEnter2D(Collider2D other)
+        protected virtual void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player") && isEnabled)
             {
@@ -31,7 +31,7 @@ namespace Athena.Mario.Items
             }
         }
 
-        virtual protected void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if(!neverDespawn)
                 pickupKillTimer?.Tick(Time.deltaTime);
@@ -39,38 +39,35 @@ namespace Athena.Mario.Items
 
 
 
-        abstract protected void PickupPayload(Collider2D picker);
+        protected abstract void PickupPayload(Collider2D picker);
 
-        virtual public void EnablePickup(bool enable)
+        public virtual void EnablePickup(bool enable)
         {
             isEnabled = enable;
-            SetDespawnTimer();
+            SetDespawnTimer(enable);
         }
 
-        private void SetDespawnTimer()
+        private void SetDespawnTimer(bool create)
         {
             if (neverDespawn)
                 return;
             if (pickupKillTimer != null)
             {
-                pickupKillTimer.OnTimerEnd -= PickupExpire;
+                pickupKillTimer.OnTimerEnd -= OnPickupExpire;
                 pickupKillTimer = null;
             }
-            pickupKillTimer = new Timer(_despawnTime);
-            pickupKillTimer.OnTimerEnd += PickupExpire;
+            if (create)
+            {
+                pickupKillTimer = new Timer(_despawnTime);
+                pickupKillTimer.OnTimerEnd += OnPickupExpire;
+            }
         }
 
-        virtual protected void PickupExpire()
-        {
-            Destroy(gameObject);
-        }
+        virtual protected void OnPickupExpire() => Destroy(gameObject);
 
         public void OnStartSpawn() { }
 
 
-        public void OnEndSpawn()
-        {
-            EnablePickup(true);
-        }
+        public void OnEndSpawn() => EnablePickup(true);
     }
 }

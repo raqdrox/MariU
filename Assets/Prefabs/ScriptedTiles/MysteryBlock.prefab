@@ -171,7 +171,7 @@ MonoBehaviour:
   points: 100
   animator: {fileID: 3813937935020149390}
   coinAnimator: {fileID: 0}
-  itemSpawnTime: 5
+  itemSpawnTime: 1
 --- !u!50 &3813937935020149427
 Rigidbody2D:
   serializedVersion: 4

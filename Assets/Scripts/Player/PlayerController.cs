@@ -14,6 +14,12 @@ namespace Athena.Mario.Player
         MARIO_FIRE
     }
 
+    public enum PowerEffects
+    {
+        EFFECT_SINV,
+        EFFECT_CINV
+    }
+
     public class PlayerController : MonoBehaviour
     {
         [Header("Debug Stuff")]
@@ -30,6 +36,7 @@ namespace Athena.Mario.Player
         [SerializeField] float jumpSpeed = 8f;
         [SerializeField] float jumpDelay = 0.25f;
         private float jumpTimer = 0f;
+        [SerializeField] private float bounceForce = 20f;
 
         [Header("Components")]
         [SerializeField] Rigidbody2D rb= null;
@@ -62,6 +69,11 @@ namespace Athena.Mario.Player
 
         [SerializeField] private Vector2[] smallMarioColliderVals;
         [SerializeField] private Vector2[] bigMarioColliderVals;
+
+        [Header("Player Effects")]
+        private bool isInvincible=false;
+        [SerializeField] private float invTime = 5f;
+
 
 
 
@@ -182,6 +194,35 @@ namespace Athena.Mario.Player
             Gizmos.DrawLine(transform.position - colliderOffset, transform.position - colliderOffset + Vector3.down * groundLength);
         }
         #endregion
+       
+
+        SpriteRenderer GetCurrentActiveRenderer()
+        {
+            switch (CurrentPlayerState)
+            {
+                case PlayerStates.MARIO_SMALL:
+                    return smallMarioRenderer;
+                case PlayerStates.MARIO_BIG:
+                    return bigMarioRenderer;
+                case PlayerStates.MARIO_FIRE:
+                    return fireMarioRenderer;
+                default:
+                    return smallMarioRenderer;
+            }
+        }
+
+        private void ResetPlayerRenderers()
+        {
+            ResetRenderer(smallMarioRenderer);
+            ResetRenderer(bigMarioRenderer);
+            ResetRenderer(fireMarioRenderer);
+        }
+
+        private void ResetRenderer(SpriteRenderer renderer)
+        {
+            renderer.color = Color.white;
+        }
+
         void OnValidate()
         {
             SetPlayerState(CurrentPlayerState);
@@ -216,10 +257,12 @@ namespace Athena.Mario.Player
             }
         }
 
-        private void GetHit()
+        public void GetHit()
         {
-
+            if(!isInvincible)
+                PowerDown();
         }
+
 
 
         public void PowerUp()
@@ -234,19 +277,100 @@ namespace Athena.Mario.Player
                 SetPlayerState(PlayerStates.MARIO_FIRE);
             }
 
+
             StateDebugUpdate();
         }
+        private void PowerDown()
+        {
+            if (CurrentPlayerState == PlayerStates.MARIO_SMALL)
+            {
+                Debug.Log("Dead");
+            }
+            else
+            {
+                SetPlayerState(PlayerStates.MARIO_SMALL);
+                SetEffect(PowerEffects.EFFECT_CINV, invTime);
+            }
+        }
 
+        public void SetEffect(PowerEffects effect,float time)
+        {
+            switch (effect)
+            {
+                case PowerEffects.EFFECT_SINV:
+                    StartCoroutine(SInvEffect(time));
+                    break;
+                case PowerEffects.EFFECT_CINV:
+                    StartCoroutine(CInvEffect(time));
+                    break;
+                default:
+                    break;
+            }
+        }
 
+        IEnumerator SInvEffect(float time)
+        {
+            var currTime = 0f;
+            var currSwitchTime = 0f;
+            var switchTime = 0.1f;
+            var switchMode = false;
+            while (currTime < time)
+            {
+                var renderer = GetCurrentActiveRenderer();
+
+                if (currSwitchTime >= switchTime)
+                {
+                    switchMode = !switchMode;
+                    currSwitchTime = 0f;
+                    renderer.color = switchMode? Color.red : Color.white;
+                }
+                currSwitchTime += Time.deltaTime;
+                currTime += Time.deltaTime;
+                yield return null;
+            }
+            ResetPlayerRenderers();
+        }
+
+        IEnumerator CInvEffect(float time)
+        {
+            var currTime = 0f;
+            var currSwitchTime = 0f;
+            var switchTime = 0.1f;
+            var switchMode = false;
+            while (currTime < time)
+            {
+                var renderer = GetCurrentActiveRenderer();
+                if (currSwitchTime >= switchTime)
+                {
+                    switchMode = !switchMode;
+                    var col = renderer.color;
+                    col.a = switchMode? 0f:0.7f;
+                    renderer.color = col;
+                    
+                }
+                currSwitchTime += Time.deltaTime;
+                currTime += Time.deltaTime;
+                yield return null;
+            }
+            ResetPlayerRenderers();
+        }
 
         public void StateChangeDebug(int stateId)
         {
             SetPlayerState((PlayerStates)stateId);
             StateDebugUpdate();
         }
+
         public void StateDebugUpdate()=> Statetxt.text = CurrentPlayerState.ToString();
 
-
+        public void BounceOff()
+        {
+            rb.AddForce(Vector2.up * bounceForce, ForceMode2D.Impulse);
+        }
+        public void BounceOff(float force)
+        {
+            rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+        }
 
 
     }

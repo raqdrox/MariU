@@ -146,8 +146,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnabled: 0
-  _despawnTime: 10
-  neverDespawn: 1
+  _despawnTime: 30
+  neverDespawn: 0
   MoveDirection: 1
   moveSpeed: 3
   DetectLayer:
