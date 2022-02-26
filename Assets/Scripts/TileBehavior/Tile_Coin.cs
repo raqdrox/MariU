@@ -12,7 +12,7 @@ namespace Athena.Mario.Tiles
             if (collision.CompareTag("Player"))
             {
                 print("Coin Collected worth " + points + " Points");
-                gameObject.SetActive(false);
+                Destroy(gameObject);
             }
         }
     }

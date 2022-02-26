@@ -9,6 +9,7 @@ namespace Athena.Mario.Player
 
     public enum PlayerStates
     {
+        MARIO_DEAD,
         MARIO_SMALL,
         MARIO_BIG,
         MARIO_FIRE
@@ -16,6 +17,7 @@ namespace Athena.Mario.Player
 
     public enum PowerEffects
     {
+        EFFECT_NONE,
         EFFECT_SINV,
         EFFECT_CINV
     }
@@ -28,6 +30,7 @@ namespace Athena.Mario.Player
         [Header("Horizontal Movement")]
         [SerializeField] float moveSpeed = 10f;
         [SerializeField] Vector2 direction;
+        [SerializeField] bool enableMovement=true;
         private bool facingRight = true;
         private bool isSprinting = false;
         private bool changingDirection = false;
@@ -73,9 +76,9 @@ namespace Athena.Mario.Player
         [Header("Player Effects")]
         private bool isInvincible=false;
         [SerializeField] private float invTime = 5f;
+        private PowerEffects activeEffect = PowerEffects.EFFECT_NONE;
 
-
-
+        public bool IsInvincible { get => isInvincible; private set => isInvincible = value; }
 
         private void Awake()
         {
@@ -96,25 +99,39 @@ namespace Athena.Mario.Player
 
         private void Start()
         {
+            EnablePlayer();
             StateChangeDebug((int)CurrentPlayerState);
+        }
+
+        void EnablePlayer()
+        {
+            enableMovement = true;
+            playerCollider.enabled = true;
+            rb.simulated = true;
         }
 
         #region Movement + Physics
         private void Update()
         {
-            onGround = Physics2D.Raycast(transform.position+colliderOffset, Vector2.down, groundLength, groundMask) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundMask);
-            if (Input.GetButtonDown("Jump"))
-                jumpTimer = Time.time + jumpDelay;
-            isSprinting = Input.GetKey(KeyCode.LeftShift);
-            direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
+            if (enableMovement)
+            {
+                onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLength, groundMask) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundMask);
+                if (Input.GetButtonDown("Jump"))
+                    jumpTimer = Time.time + jumpDelay;
+                isSprinting = Input.GetKey(KeyCode.LeftShift);
+                direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            }
         }
         private void FixedUpdate()
         {
-            MoveCharacter(direction.x);
-            ModifyPhysics();
-            if (jumpTimer > Time.time && onGround)
-                Jump();
+            if (enableMovement)
+            {
+                MoveCharacter(direction.x);
+                ModifyPhysics();
+                if (jumpTimer > Time.time && onGround)
+                    Jump();
+            }
+            
         }
 
         void MoveCharacter(float horizontal)
@@ -225,7 +242,8 @@ namespace Athena.Mario.Player
 
         void OnValidate()
         {
-            SetPlayerState(CurrentPlayerState);
+            if(CurrentPlayerState!=PlayerStates.MARIO_DEAD)
+                SetPlayerState(CurrentPlayerState);
         }
 
         private void SetPlayerState(PlayerStates state)
@@ -251,20 +269,23 @@ namespace Athena.Mario.Player
                     bigMarioRenderer.gameObject.SetActive(false);
                     fireMarioRenderer.gameObject.SetActive(true);
                     break;
+                case PlayerStates.MARIO_DEAD:
+                    animator.SetTrigger("die");
+                    enableMovement = false;
+                    playerCollider.enabled = false;
+                    rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                    break;
                 default:
-                    Debug.LogError("Invalid State",this);
+                    Debug.LogError("Invalid State", this);
                     break;
             }
         }
 
         public void GetHit()
         {
-            if(!isInvincible)
+            if (!IsInvincible && CurrentPlayerState != PlayerStates.MARIO_DEAD) 
                 PowerDown();
         }
-
-
-
         public void PowerUp()
         {
 
@@ -284,6 +305,7 @@ namespace Athena.Mario.Player
         {
             if (CurrentPlayerState == PlayerStates.MARIO_SMALL)
             {
+                SetPlayerState(PlayerStates.MARIO_DEAD);
                 Debug.Log("Dead");
             }
             else
@@ -310,6 +332,7 @@ namespace Athena.Mario.Player
 
         IEnumerator SInvEffect(float time)
         {
+            IsInvincible = true;
             var currTime = 0f;
             var currSwitchTime = 0f;
             var switchTime = 0.1f;
@@ -329,10 +352,12 @@ namespace Athena.Mario.Player
                 yield return null;
             }
             ResetPlayerRenderers();
+            IsInvincible = false;
         }
 
         IEnumerator CInvEffect(float time)
         {
+            IsInvincible = true;
             var currTime = 0f;
             var currSwitchTime = 0f;
             var switchTime = 0.1f;
@@ -353,6 +378,7 @@ namespace Athena.Mario.Player
                 yield return null;
             }
             ResetPlayerRenderers();
+            IsInvincible = false;
         }
 
         public void StateChangeDebug(int stateId)
@@ -372,6 +398,6 @@ namespace Athena.Mario.Player
             rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
         }
 
-
+        public bool IsEffectActive(PowerEffects effect) => activeEffect == effect;
     }
 }

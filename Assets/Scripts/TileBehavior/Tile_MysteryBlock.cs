@@ -25,11 +25,10 @@ namespace Athena.Mario.Tiles
 
         [SerializeField] MysteryItem SpawnItemType;
         [SerializeField] SpawnableData Spawnables;
-        [SerializeField] int points = 100;
         [SerializeField] Animator animator;
         [SerializeField] Animator coinAnimator;
         [SerializeField] float itemSpawnTime = 5f;
-        GameObject SpawnedObj = null;
+        
         Vector3 blockIdlePos;
 
         private void Awake()
@@ -87,35 +86,35 @@ namespace Athena.Mario.Tiles
                     break;
             }
             
-            SpawnedObj = Instantiate(Spawnables.GetPrefabFor(type), blockIdlePos, ItemSpawnPoint.rotation);
-            var spawnedItem = SpawnedObj.GetComponent<ISpawnableItem>();
+            var spawnedObj = Instantiate(Spawnables.GetPrefabFor(type), blockIdlePos, ItemSpawnPoint.rotation);
+            var spawnedItem = spawnedObj.GetComponent<ISpawnableItem>();
             spawnedItem.OnStartSpawn();
             if (spawnedItem.NeedsSpawnCycle)
-            { StartCoroutine(ItemSpawnSequence(SpawnedObj)); }
+            { StartCoroutine(ItemSpawnSequence(spawnedObj)); }
         }
 
     
 
-        IEnumerator ItemSpawnSequence(GameObject spawnedItem)
+        IEnumerator ItemSpawnSequence(GameObject spawnedObj)
         {
             float currentMovementTime = 0f;
-            while (Vector3.Distance(spawnedItem.transform.position, ItemSpawnPoint.position) > 0)
+            while (Vector3.Distance(spawnedObj.transform.position, ItemSpawnPoint.position) > 0)
             {
                 currentMovementTime += Time.deltaTime;
-                spawnedItem.transform.position = Vector3.Lerp(blockIdlePos, ItemSpawnPoint.position, currentMovementTime / itemSpawnTime);
+                spawnedObj.transform.position = Vector3.Lerp(blockIdlePos, ItemSpawnPoint.position, currentMovementTime / itemSpawnTime);
 
                 //transform.position = Vector3.Lerp(blockIdlePos, ItemSpawnPoint.position, currentMovementTime / itemSpawnTime);//Funny Mistake
                 yield return null;
             }
-            EnableSpawnedItem();
+            EnableSpawnedItem(spawnedObj);
         }
 
-        void EnableSpawnedItem()
+        void EnableSpawnedItem(GameObject spawnedObj)
         {
             
-            if (SpawnedObj == null)
+            if (spawnedObj == null)
                 return;
-            SpawnedObj.GetComponent<ISpawnableItem>().OnEndSpawn();
+            spawnedObj.GetComponent<ISpawnableItem>().OnEndSpawn();
         }
 
         void SetBlockUsed()

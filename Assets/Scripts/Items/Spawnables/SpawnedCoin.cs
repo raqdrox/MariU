@@ -30,6 +30,7 @@ namespace Athena.Mario.Items
 
         public void OnAnimEnd()
         {
+            //show text here
             Destroy(gameObject);
         }
 
