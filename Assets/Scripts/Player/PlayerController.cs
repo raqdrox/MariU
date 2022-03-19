@@ -24,8 +24,7 @@ namespace Athena.Mario.Player
 
     public class PlayerController : MonoBehaviour
     {
-        [Header("Debug Stuff")]
-        [SerializeField] Text Statetxt;
+
 
         [Header("Horizontal Movement")]
         [SerializeField] float moveSpeed = 10f;
@@ -69,6 +68,7 @@ namespace Athena.Mario.Player
         [SerializeField] private SpriteRenderer smallMarioRenderer;
         [SerializeField] private SpriteRenderer bigMarioRenderer;
         [SerializeField] private SpriteRenderer fireMarioRenderer;
+        [SerializeField] private SpriteRenderer deadMarioRenderer;
 
         [SerializeField] private Vector2[] smallMarioColliderVals;
         [SerializeField] private Vector2[] bigMarioColliderVals;
@@ -100,7 +100,7 @@ namespace Athena.Mario.Player
         private void Start()
         {
             EnablePlayer();
-            StateChangeDebug((int)CurrentPlayerState);
+            
         }
 
         void EnablePlayer()
@@ -223,6 +223,8 @@ namespace Athena.Mario.Player
                     return bigMarioRenderer;
                 case PlayerStates.MARIO_FIRE:
                     return fireMarioRenderer;
+                case PlayerStates.MARIO_DEAD:
+                    return deadMarioRenderer;
                 default:
                     return smallMarioRenderer;
             }
@@ -233,6 +235,7 @@ namespace Athena.Mario.Player
             ResetRenderer(smallMarioRenderer);
             ResetRenderer(bigMarioRenderer);
             ResetRenderer(fireMarioRenderer);
+            ResetRenderer(deadMarioRenderer);
         }
 
         private void ResetRenderer(SpriteRenderer renderer)
@@ -246,7 +249,7 @@ namespace Athena.Mario.Player
                 SetPlayerState(CurrentPlayerState);
         }
 
-        private void SetPlayerState(PlayerStates state)
+        public void SetPlayerState(PlayerStates state)
         {
             CurrentPlayerState = state;
             switch (state)
@@ -256,29 +259,47 @@ namespace Athena.Mario.Player
                     smallMarioRenderer.gameObject.SetActive(true);
                     bigMarioRenderer.gameObject.SetActive(false);
                     fireMarioRenderer.gameObject.SetActive(false);
+                    deadMarioRenderer.gameObject.SetActive(false);
                     break;
                 case PlayerStates.MARIO_BIG:
                     playerCollider.points = bigMarioColliderVals;
                     smallMarioRenderer.gameObject.SetActive(false);
                     bigMarioRenderer.gameObject.SetActive(true);
                     fireMarioRenderer.gameObject.SetActive(false);
+                    deadMarioRenderer.gameObject.SetActive(false);
                     break;
                 case PlayerStates.MARIO_FIRE:
                     playerCollider.points = bigMarioColliderVals;
                     smallMarioRenderer.gameObject.SetActive(false);
                     bigMarioRenderer.gameObject.SetActive(false);
                     fireMarioRenderer.gameObject.SetActive(true);
+                    deadMarioRenderer.gameObject.SetActive(false);
                     break;
                 case PlayerStates.MARIO_DEAD:
-                    animator.SetTrigger("die");
-                    enableMovement = false;
-                    playerCollider.enabled = false;
-                    rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                    playerCollider.points = smallMarioColliderVals;
+                    smallMarioRenderer.gameObject.SetActive(false);
+                    bigMarioRenderer.gameObject.SetActive(false);
+                    fireMarioRenderer.gameObject.SetActive(false);
+                    deadMarioRenderer.gameObject.SetActive(true);
+                    PlayerDie();
                     break;
                 default:
-                    Debug.LogError("Invalid State", this);
                     break;
             }
+        }
+
+        private IEnumerator MarioDeathSequence()
+        {
+            enableMovement = false;
+            playerCollider.enabled = false;
+            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            rb.velocity = Vector2.zero;
+            float popForce = 10f;
+            rb.AddForce(Vector2.up * popForce, ForceMode2D.Impulse);
+            rb.gravityScale = gravity*1f;
+            
+            yield return new WaitForSeconds(3f);
+            Destroy(gameObject);
         }
 
         public void GetHit()
@@ -298,15 +319,12 @@ namespace Athena.Mario.Player
                 SetPlayerState(PlayerStates.MARIO_FIRE);
             }
 
-
-            StateDebugUpdate();
         }
         private void PowerDown()
         {
             if (CurrentPlayerState == PlayerStates.MARIO_SMALL)
             {
                 SetPlayerState(PlayerStates.MARIO_DEAD);
-                Debug.Log("Dead");
             }
             else
             {
@@ -315,8 +333,14 @@ namespace Athena.Mario.Player
             }
         }
 
+        private void PlayerDie()
+        {
+            StartCoroutine(MarioDeathSequence());
+        }
+
         public void SetEffect(PowerEffects effect,float time)
         {
+            activeEffect = effect;
             switch (effect)
             {
                 case PowerEffects.EFFECT_SINV:
@@ -381,13 +405,7 @@ namespace Athena.Mario.Player
             IsInvincible = false;
         }
 
-        public void StateChangeDebug(int stateId)
-        {
-            SetPlayerState((PlayerStates)stateId);
-            StateDebugUpdate();
-        }
 
-        public void StateDebugUpdate()=> Statetxt.text = CurrentPlayerState.ToString();
 
         public void BounceOff()
         {
@@ -398,6 +416,11 @@ namespace Athena.Mario.Player
             rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
         }
 
-        public bool IsEffectActive(PowerEffects effect) => activeEffect == effect;
+        public bool IsEffectActive(PowerEffects effect)
+        {
+            print(activeEffect);
+            print(effect);
+            return activeEffect == effect;
+        }
     }
 }

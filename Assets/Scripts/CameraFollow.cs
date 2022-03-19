@@ -8,6 +8,13 @@ public class CameraFollow : MonoBehaviour
 
     private void Update()
     {
-        transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
+        try
+        {
+            transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
+        }
+        catch(MissingReferenceException)
+        {
+
+        }
     }
 }

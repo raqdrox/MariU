@@ -70,7 +70,9 @@ namespace Athena.Mario.Items
             {
                 sideGizmoColor = Color.blue;
             }
-            rb.velocity = new Vector2(0f, rb.velocity.y) + (Vector2.right * MoveDirection * horizontalSpeed);
+            rb.velocity = new Vector2(0f, rb.velocity.y) + (horizontalSpeed
+                * MoveDirection
+                * Vector2.right);
         }
 
         private void HandleGroundHit()
@@ -89,7 +91,7 @@ namespace Athena.Mario.Items
 
         private void InitialPush()
         {
-            rb.velocity = (Vector2.up * verticalSpeed) + (Vector2.right * MoveDirection * horizontalSpeed);
+            rb.velocity = (Vector2.up * verticalSpeed) + (horizontalSpeed * MoveDirection * Vector2.right);
         }
         private void OnDrawGizmos()
         {
