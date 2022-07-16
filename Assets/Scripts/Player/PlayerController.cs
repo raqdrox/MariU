@@ -292,7 +292,7 @@ namespace Athena.Mario.Player
         {
             enableMovement = false;
             playerCollider.enabled = false;
-            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            //Move.constraints = RigidbodyConstraints2D.FreezeAll;
             rb.velocity = Vector2.zero;
             float popForce = 10f;
             rb.AddForce(Vector2.up * popForce, ForceMode2D.Impulse);
@@ -418,8 +418,6 @@ namespace Athena.Mario.Player
 
         public bool IsEffectActive(PowerEffects effect)
         {
-            print(activeEffect);
-            print(effect);
             return activeEffect == effect;
         }
     }

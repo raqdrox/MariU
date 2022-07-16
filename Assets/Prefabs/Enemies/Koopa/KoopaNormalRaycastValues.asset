@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a1c1c24927f574a9256d44e7d1069b, type: 3}
+  m_Name: KoopaNormalRaycastValues
+  m_EditorClassIdentifier: 
+  scSideCenterOffset: 0
+  scSideStartOffset: 0.4
+  scSideEndOffset: 0.1
+  scTopOffset: 0.05
+  scBottomOffset: -0.62
+  tcTopCenterOffset: -0.275
+  tcTopStartOffset: 0.41
+  tcTopEndOffset: 0.065
+  tcLeftOffset: 0.35
+  tcRightOffset: -0.35

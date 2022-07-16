@@ -53,7 +53,7 @@ namespace Athena.Mario.Enemies
                 else if(plrHit.Item1.IsEffectActive(PowerEffects.EFFECT_SINV))
                 {
                     var hitDir = plrHit.Item2.collider.gameObject.transform.position.x <= transform.position.x;
-                    StartCoroutine(GetPopped(hitDir));
+                    StartCoroutine(PoppedDeath(hitDir));
                     return true;
                 }
 
@@ -75,14 +75,17 @@ namespace Athena.Mario.Enemies
                 {
                     if (plrHit.Item1.IsEffectActive(PowerEffects.EFFECT_SINV))
                     { 
-                        StartCoroutine(GetPopped()); 
+                        StartCoroutine(PoppedDeath()); 
                     }
                     else
                     {
                         if (plrHit.Item2==hit1 || plrHit.Item2 == hit2)
                         {
                             plrHit.Item1.BounceOff();
-                            StartCoroutine(GetSquashed());
+                            if (plrHit.Item2 == hit1)
+                                GetSquashed(false);
+                            else
+                                GetSquashed(true);
                         }
                         else
                         {
