@@ -9,6 +9,7 @@ namespace Athena.Mario.Misc
     public class MarioDebugScript : MonoBehaviour
     {
         [SerializeField] Text Statetxt;
+        [SerializeField] Text Effecttxt;
         private PlayerController _currentPlayer;
 
         private void Start()
@@ -42,5 +43,12 @@ namespace Athena.Mario.Misc
         {
             StateDebugUpdate();
         }
+        
+        public void SetEffect(int effect)
+        {
+            Effecttxt.text = ((PowerEffects)effect).ToString();
+            _currentPlayer.SetEffect((PowerEffects)effect,10);
+        }
+        
     }
 }

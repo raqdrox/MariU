@@ -3,31 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using Athena.Mario.Player;
 using System;
+using System.Linq;
 using Athena.Mario.Misc;
-using Random = UnityEngine.Random;
+using FrostyScripts.Misc;
+using UnityEngine.Serialization;
 
 namespace Athena.Mario.Enemies
 {
     public class KoopaEnemy : Enemy
-    {
-        [SerializeField] public int MoveDirection { get => moveDirection;
+    {//TODO : Separate Concerns
+        public Direction MoveDirection { get => moveDirection;
             private set
             {
                 prevMoveDirection = moveDirection;
                 moveDirection = value;
-                spriteRenderer.flipX = (value==1);
+                spriteRenderer.flipX = (value==Direction.RIGHT);
             }
         }
 
-        private int prevMoveDirection = 0;
-        public int moveDirection = 0;
+        private Direction prevMoveDirection = 0;
+        public Direction moveDirection = 0;
         [SerializeField] float moveSpeed = 1f;
         [SerializeField] float slideSpeed = 2f;
-        [SerializeField] LayerMask DetectLayer;
+       
 
-
-        [SerializeField] private CollisionRaycastValues normalCollisionRaycastValues;
-
+        [SerializeField] private HitHandler hitHandler;
+        [SerializeField] private List<HitData> currentHits;
+        
         [SerializeField] private string squashedAnimName = "Squashed";
         private int squashedAnimHash;
         [SerializeField] private string slideAnimName = "Slide";
@@ -39,7 +41,7 @@ namespace Athena.Mario.Enemies
         [SerializeField] private float returnAnimLength = 2f;
         
 
-        [SerializeField] private KoopaState _state;
+        [SerializeField] private KoopaState state;
         private Coroutine squashedEnumerator;
         private void InitAnim()
         {
@@ -51,17 +53,19 @@ namespace Athena.Mario.Enemies
         protected override void Awake()
         {
             base.Awake();
+            if (hitHandler == null)
+                hitHandler = GetComponent<HitHandler>();
             InitAnim();
-            MoveDirection = MoveDirection;
+            MoveDirection = Direction.RIGHT;
             State = KoopaState.KOOPA_NORMAL;
         }
 
         private KoopaState State
         {
-            get => _state;
+            get => state;
             set
             {
-                _state = value;
+                state = value;
                 switch (value)
                 {
                     case KoopaState.KOOPA_NORMAL:
@@ -70,7 +74,7 @@ namespace Athena.Mario.Enemies
                         if (MoveDirection == 0)
                         {
 
-                            MoveDirection = (new System.Random().Next(1, 2) == 2 )? 1 : -1;
+                            MoveDirection = (new System.Random().Next(1, 2) == 2 )? Direction.RIGHT : Direction.LEFT;
                         }
                         break;
                     case KoopaState.KOOPA_SQUASHED:
@@ -87,7 +91,7 @@ namespace Athena.Mario.Enemies
                         if (MoveDirection==0)
                         {
                             var random = new System.Random();
-                            MoveDirection = (random.Next(2) == 1) ? 1 : -1;
+                            MoveDirection = (random.Next(2) == 1) ? Direction.RIGHT : Direction.LEFT;
                         }
                         animator.SetTrigger(slideAnimHash);
                         break;
@@ -108,134 +112,122 @@ namespace Athena.Mario.Enemies
             State = KoopaState.KOOPA_NORMAL;
         }
         
-        private CollisionRaycastValues GetRaycastValues()
+        private bool CheckForHorizontalHit()
         {
-            switch (State)
-            {
-                case KoopaState.KOOPA_NORMAL:
-                    return normalCollisionRaycastValues;
-                case KoopaState.KOOPA_SQUASHED:
-                    return normalCollisionRaycastValues;
-                case KoopaState.KOOPA_SLIDING:
-                    return normalCollisionRaycastValues;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+            //TODO : Reimplement Hit Check
 
-        private bool CheckForHoriHit()
-        {
-            
-            var mDir = MoveDirection;
-            if (MoveDirection == 0)
-                mDir = prevMoveDirection;
-            else if (MoveDirection == 0 && prevMoveDirection == 0)
-            {
-                mDir = 1;
-            }
-            var rayValues = GetRaycastValues();
-            RaycastHit2D hit1 = Physics2D.Raycast(transform.position + new Vector3(rayValues.scSideCenterOffset + (rayValues.scSideStartOffset * mDir), rayValues.scTopOffset, 0f), new Vector2(mDir, 0f), rayValues.scSideEndOffset, DetectLayer);
-            RaycastHit2D hit2 = Physics2D.Raycast(transform.position + new Vector3(rayValues.scSideCenterOffset + (rayValues.scSideStartOffset * mDir), rayValues.scBottomOffset, 0f), new Vector2(mDir, 0f), rayValues.scSideEndOffset, DetectLayer);
+            var hList = currentHits.FindAll(x => x.hitSide == Direction.LEFT || x.hitSide == Direction.RIGHT);
 
-            RaycastHit2D hit3 = Physics2D.Raycast(transform.position + new Vector3(rayValues.scSideCenterOffset + (rayValues.scSideStartOffset * -mDir), rayValues.scTopOffset, 0f), new Vector2(-mDir, 0f), rayValues.scSideEndOffset, DetectLayer);
-            RaycastHit2D hit4 = Physics2D.Raycast(transform.position + new Vector3(rayValues.scSideCenterOffset + (rayValues.scSideStartOffset * -mDir), +rayValues.scBottomOffset, 0f), new Vector2(-mDir, 0f), rayValues.scSideEndOffset, DetectLayer);
 
-            if (hit1 || hit2 || hit3 || hit4)
-            {
-                Tuple<PlayerController, RaycastHit2D> plrHit = GetFirstPlayerFromRaycasts(hit1, hit2, hit3, hit4);
-                //REPLACE WITH ENTITY FINDING INSTEAD OF JUST PLAYER TO ALLOW ENEMIES OR OTHER ENTITIES TO GET HIT
+            if (hList.Count == 0) return false;
 
-                if (plrHit == null)
+            var plrHitData = hList.FirstOrDefault(x => x.hitObject.CompareTag("Player"));
+            if (plrHitData != null) {
+                var plrHit = plrHitData.hitObject.GetComponent<PlayerController>();
+                var hitSide = plrHitData.hitSide;
+                if (plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
                 {
-                    if (State == KoopaState.KOOPA_SLIDING)
-                    {
-                        var popable = hit1.collider.GetComponent<IPopable>();//REPLACE WITH CHECK INVOLVING ALL FRONT COLLIDERS
-                        if (popable!=null)
-                        {
-                            var hitDir= hit1.collider.gameObject.transform.position.x <= transform.position.x;
-                            popable.PopThis(hitDir);
-                        }
-                    }
-                    Debug.Log("Non Player Hit");
-                    if (hit1 || hit2)
-                    {
-                        MoveDirection *= -1;
-                        return true;
-                    }
-
-                    
-                }
-                else if (plrHit.Item1.IsEffectActive(PowerEffects.EFFECT_SINV))
-                {
-                    Debug.Log("Powered Player Hit");
-                    var hitDir = plrHit.Item2.collider.gameObject.transform.position.x <= transform.position.x;
+                    var hitDir = plrHitData.hitSide == Direction.RIGHT;
                     GetPopped(hitDir);
                     return true;
                 }
+                switch (State)
+                {
+                    case KoopaState.KOOPA_SQUASHED:
+                    {
+                        var hitDir = hitSide == Direction.RIGHT;
+                        MoveDirection = hitDir ? Direction.LEFT : Direction.RIGHT;
+                        State = KoopaState.KOOPA_SLIDING;
+                        break;
+                    }
+                    case KoopaState.KOOPA_SLIDING:
+                        plrHit.GetHit();
+                        break;
+                    case KoopaState.KOOPA_NORMAL:
+                        plrHit.GetHit();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                return true;
+            }
+
+            if (State == KoopaState.KOOPA_SLIDING)
+            {
+                var popableHit = currentHits.FindAll(x => x.hitObject.GetComponent<IPopable>() != null);
+
+                if (popableHit.Count != 0)
+                {
+                    foreach (var popable in popableHit)
+                    {
+                        var hitDir = popable.hitSide == Direction.RIGHT;
+                        popable.hitObject.GetComponent<IPopable>().PopThis(hitDir);
+                    }
+                }
                 else
                 {
-                    if (State == KoopaState.KOOPA_SQUASHED)
-                    {
-                        Debug.Log("Hit a squashed koopa");
-                        var hitDir = plrHit.Item2.collider.gameObject.transform.position.x <= transform.position.x;
-                        Debug.Log(plrHit.Item2.collider.gameObject.transform.position.x);
-                        Debug.Log(transform.position.x);
-                        Debug.Log(hitDir);
-                        MoveDirection = hitDir ? 1 : -1;
-                        State = KoopaState.KOOPA_SLIDING;
-                    }
-                    else
-                    {
-                        Debug.Log("Player Hit");
-                        plrHit.Item1.GetHit();
-                    }
+                    var terrainHits = currentHits.FindAll(x =>hitHandler.terrainLayer.Contains(x.hitObject.layer));
+                    if (terrainHits.Count == 0) return false;
+                    var hitSide = terrainHits.Count(x => x.hitSide == Direction.RIGHT) >
+                            terrainHits.Count(x => x.hitSide == Direction.LEFT)?Direction.RIGHT:Direction.LEFT;
+                    if (hitSide != moveDirection) return false;
+                    MoveDirection = MoveDirection == Direction.RIGHT ? Direction.LEFT : Direction.RIGHT;
                     return true;
                 }
-
             }
-            return false;
-        }
-
-        private bool CheckForVertHit()
-        {
-            var rayValues = GetRaycastValues();
-            RaycastHit2D hit1 = Physics2D.Raycast(transform.position + new Vector3(rayValues.tcLeftOffset,rayValues. tcTopCenterOffset+rayValues. tcTopStartOffset, 0f), Vector3.up, rayValues.tcTopEndOffset, DetectLayer);
-            RaycastHit2D hit2 = Physics2D.Raycast(transform.position + new Vector3(rayValues.tcRightOffset,rayValues. tcTopCenterOffset + rayValues.tcTopStartOffset, 0f), Vector3.up, rayValues.tcTopEndOffset, DetectLayer);
-            RaycastHit2D hit3 = Physics2D.Raycast(transform.position + new Vector3(rayValues.tcLeftOffset, rayValues.tcTopCenterOffset - rayValues.tcTopStartOffset, 0f), Vector3.down, rayValues.tcTopEndOffset, DetectLayer);
-            RaycastHit2D hit4 = Physics2D.Raycast(transform.position + new Vector3(rayValues.tcRightOffset, rayValues. tcTopCenterOffset - rayValues.tcTopStartOffset, 0f), Vector3.down, rayValues.tcTopEndOffset, DetectLayer);
-
-            if (hit1 || hit2 || hit3 || hit4)
+            else 
             {
-                Tuple<PlayerController, RaycastHit2D> plrHit = GetFirstPlayerFromRaycasts(hit1, hit2, hit3, hit4);
-                if (plrHit != null)
-                {
-                    if (plrHit.Item1.IsEffectActive(PowerEffects.EFFECT_SINV))
-                    {
-                        StartCoroutine(PoppedDeath());
-                    }
-                    else
-                    {
-                        if (plrHit.Item2 == hit1 || plrHit.Item2 == hit2)
-                        {
-                            plrHit.Item1.BounceOff();
-                            if (plrHit.Item2 == hit1)
-                                GetSquashed(false);
-                            else
-                                GetSquashed(true);
-                        }
-                        else
-                        {
-                            plrHit.Item1.GetHit();
-                            return true;
-                        }
-                    }
-                    return true;
-                }
+                var terrainHits = currentHits.FindAll(x =>hitHandler.terrainLayer.Contains(x.hitObject.layer));
+                if (terrainHits.Count == 0) return false;
+                var hitSide = terrainHits.Count(x => x.hitSide == Direction.RIGHT) >
+                              terrainHits.Count(x => x.hitSide == Direction.LEFT)?Direction.RIGHT:Direction.LEFT;
+                if (hitSide != moveDirection) return false;
+                MoveDirection = MoveDirection == Direction.RIGHT ? Direction.LEFT : Direction.RIGHT;
+                return true;
             }
+
             return false;
         }
+        
+        private bool CheckForVerticalHit()
+        { 
+            //TODO : Reimplement Hit Check
+            var hList = currentHits.FindAll(x => x.hitSide == Direction.TOP || x.hitSide == Direction.DOWN);
 
+            if (hList.Count == 0) return false;
 
+            var plrHitData = hList.FirstOrDefault(x => x.hitObject.CompareTag("Player"));
+            if (plrHitData == null) return false;
+
+            var plrHit = plrHitData.hitObject.GetComponent<PlayerController>();
+            var hitDir = plrHitData.hitSide;
+            if (plrHit == null) return false;
+
+            if (plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
+            {
+                StartCoroutine(PoppedDeath());
+            }
+            else if (plrHit.IsEffectActive(PowerEffects.EFFECT_CINV))
+            {
+                return false;
+            }
+            else
+            {
+                switch (hitDir)
+                {
+                    case Direction.TOP:
+                        plrHit.BounceOff();
+                        GetSquashed(false);
+                        break;
+                    default:
+                        plrHit.GetHit();
+                        return true;
+                }
+            }
+
+            return true;
+        }
 
         protected override void GetSquashed(bool hitRight)
         {
@@ -246,7 +238,7 @@ namespace Athena.Mario.Enemies
                     State = KoopaState.KOOPA_SQUASHED;
                     break;
                 case KoopaState.KOOPA_SQUASHED:
-                    MoveDirection = hitRight ? 1 : -1;
+                    MoveDirection = hitRight ? Direction.RIGHT : Direction.LEFT;
                     State = KoopaState.KOOPA_SLIDING;
                     break;
                 case KoopaState.KOOPA_SLIDING:
@@ -256,44 +248,15 @@ namespace Athena.Mario.Enemies
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-
-
-        private void OnDrawGizmos()
-        {
-            var rayValues = GetRaycastValues();
-            if(rayValues==null)
-                return;
-            var mDir = MoveDirection;
-            if (MoveDirection == 0)
-                mDir = prevMoveDirection;
-            Vector3 scTopPos = transform.position + new Vector3(rayValues.scSideCenterOffset + (rayValues.scSideStartOffset * mDir), rayValues.scTopOffset, 0f);
-            Vector3 scBotPos = transform.position + new Vector3(rayValues.scSideCenterOffset + (rayValues.scSideStartOffset * mDir), rayValues.scBottomOffset, 0f);
-            Vector3 scNegTopPos = transform.position + new Vector3(rayValues.scSideCenterOffset + (rayValues.scSideStartOffset * -mDir), rayValues.scTopOffset, 0f);
-            Vector3 scNegBotPos = transform.position + new Vector3(rayValues.scSideCenterOffset + (rayValues.scSideStartOffset * -mDir), rayValues.scBottomOffset, 0f);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(scTopPos, scTopPos + (new Vector3(mDir, 0f, 0f) * rayValues.scSideEndOffset));
-            Gizmos.DrawLine(scBotPos, scBotPos + (new Vector3(mDir, 0f, 0f) * rayValues.scSideEndOffset));
-            Gizmos.DrawLine(scNegTopPos, scNegTopPos + (new Vector3(-mDir, 0f, 0f) * rayValues.scSideEndOffset));
-            Gizmos.DrawLine(scNegBotPos, scNegBotPos + (new Vector3(-mDir, 0f, 0f) * rayValues.scSideEndOffset));
-
-            Vector3 tcLeftPos = transform.position + new Vector3(rayValues.tcLeftOffset, rayValues.tcTopCenterOffset + rayValues.tcTopStartOffset, 0f);
-            Vector3 tcRightPos = transform.position + new Vector3(rayValues.tcRightOffset, rayValues.tcTopCenterOffset + rayValues.tcTopStartOffset, 0f);
-            Vector3 tcNegLeftPos = transform.position + new Vector3(rayValues.tcLeftOffset, rayValues.tcTopCenterOffset - rayValues.tcTopStartOffset, 0f);
-            Vector3 tcNegRightPos = transform.position + new Vector3(rayValues.tcRightOffset, rayValues.tcTopCenterOffset - rayValues.tcTopStartOffset, 0f);
-            Gizmos.DrawLine(tcLeftPos, tcLeftPos + (Vector3.up * rayValues.tcTopEndOffset));
-            Gizmos.DrawLine(tcRightPos, tcRightPos + (Vector3.up * rayValues.tcTopEndOffset));
-            Gizmos.DrawLine(tcNegLeftPos, tcNegLeftPos + (Vector3.down * rayValues.tcTopEndOffset));
-            Gizmos.DrawLine(tcNegRightPos, tcNegRightPos + (Vector3.down * rayValues.tcTopEndOffset));
-        }
+        
         private void FixedUpdate()
         {
             if (isActive && !isDead)
             {
-
-                var topHit = CheckForVertHit();
+                currentHits = hitHandler.GetHits();
+                var topHit = CheckForVerticalHit();
                 if (!topHit)
-                    CheckForHoriHit();
+                    CheckForHorizontalHit();
                 Move();
             }
         }
@@ -303,15 +266,17 @@ namespace Athena.Mario.Enemies
             switch (State)
             {
                 case KoopaState.KOOPA_NORMAL:
-                    rb.velocity = MoveDirection * moveSpeed * Vector2.right;
+                    rb.velocity = HitHandler.DirectionMap[MoveDirection] * moveSpeed ;
                     break;
                 case KoopaState.KOOPA_SQUASHED:
                     rb.velocity = Vector2.zero;
                     break;
                 case KoopaState.KOOPA_SLIDING:
-                    rb.velocity = MoveDirection * slideSpeed * Vector2.right;
+                    rb.velocity = HitHandler.DirectionMap[MoveDirection] * slideSpeed;
                     break;
             }
         }
     }
+
+    
 }

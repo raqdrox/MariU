@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,40 +28,47 @@ namespace Athena.Mario.Player
 
 
         [Header("Horizontal Movement")]
-        [SerializeField] float moveSpeed = 10f;
-        [SerializeField] Vector2 direction;
-        [SerializeField] bool enableMovement=true;
+        [SerializeField]
+        private float moveSpeed = 10f;
+        [SerializeField] private Vector2 direction;
+        [SerializeField] private bool enableMovement=true;
         private bool facingRight = true;
         private bool isSprinting = false;
         private bool changingDirection = false;
 
         [Header("Vertical Movement")]
-        [SerializeField] float jumpSpeed = 8f;
-        [SerializeField] float jumpDelay = 0.25f;
+        [SerializeField]
+        private float jumpSpeed = 8f;
+        [SerializeField] private float jumpDelay = 0.25f;
         private float jumpTimer = 0f;
         [SerializeField] private float bounceForce = 20f;
 
         [Header("Components")]
-        [SerializeField] Rigidbody2D rb= null;
-        [SerializeField] Animator animator=null;
-        [SerializeField] EdgeCollider2D playerCollider;
+        [SerializeField]
+        private Rigidbody2D rb= null;
+        [SerializeField] private Animator animator=null;
+        [SerializeField] private EdgeCollider2D playerCollider;
         
 
         [Header("Physics")]
-        [SerializeField] float maxSpeed = 7f;
-        [SerializeField] float maxSprintSpeed = 10f;
-        [SerializeField] float linearDrag = 4f;
-        [SerializeField] float gravity = 4f;
-        [SerializeField] float fallMultiplier = 4f;
-        [SerializeField] bool enableLinearDrag = true;
+        [SerializeField]
+        private float maxSpeed = 7f;
+        [SerializeField] private float maxSprintSpeed = 10f;
+        [SerializeField] private float linearDrag = 4f;
+        [SerializeField] private float gravity = 4f;
+        [SerializeField] private float fallMultiplier = 4f;
+        [SerializeField] private bool enableLinearDrag = true;
 
 
         [Header("Collision")]
-        [SerializeField] bool onGround=false;
-        [SerializeField] float groundLength = 0.6f;
-        [SerializeField] Vector3 colliderOffset;
-        [SerializeField] List<LayerMask> groundLayers;
+        [SerializeField]
+        private bool onGround=false;
+        [SerializeField] private float groundLength = 0.6f;
+        [SerializeField] private Vector3 colliderOffset;
+        [SerializeField] private List<LayerMask> groundLayers;
+        [SerializeField] private int invIgnoreLayer;
         private int groundMask;
+        
 
         [Header("Player States")]
         [SerializeField] public PlayerStates CurrentPlayerState = PlayerStates.MARIO_SMALL;
@@ -103,7 +111,7 @@ namespace Athena.Mario.Player
             
         }
 
-        void EnablePlayer()
+        private void EnablePlayer()
         {
             enableMovement = true;
             playerCollider.enabled = true;
@@ -134,7 +142,7 @@ namespace Athena.Mario.Player
             
         }
 
-        void MoveCharacter(float horizontal)
+        private void MoveCharacter(float horizontal)
         {
             changingDirection = (direction.x > 0 && rb.velocity.x < 0) || (direction.x < 0 && rb.velocity.x > 0);
             rb.AddForce(Vector2.right * horizontal * moveSpeed);
@@ -162,14 +170,14 @@ namespace Athena.Mario.Player
 
         }
 
-        void Jump()
+        private void Jump()
         {
             rb.velocity = new Vector2(rb.velocity.x, 0f);
             rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
             jumpTimer = 0;
         }
 
-        void ModifyPhysics()
+        private void ModifyPhysics()
         {
             if (onGround)
             {
@@ -198,7 +206,7 @@ namespace Athena.Mario.Player
             }
         }
 
-        void Flip()
+        private void Flip()
         {
             facingRight = !facingRight;
             transform.rotation = Quaternion.Euler(0, facingRight ? 0 : 180, 0);
@@ -211,9 +219,9 @@ namespace Athena.Mario.Player
             Gizmos.DrawLine(transform.position - colliderOffset, transform.position - colliderOffset + Vector3.down * groundLength);
         }
         #endregion
-       
 
-        SpriteRenderer GetCurrentActiveRenderer()
+
+        private SpriteRenderer GetCurrentActiveRenderer()
         {
             switch (CurrentPlayerState)
             {
@@ -243,7 +251,7 @@ namespace Athena.Mario.Player
             renderer.color = Color.white;
         }
 
-        void OnValidate()
+        private void OnValidate()
         {
             if(CurrentPlayerState!=PlayerStates.MARIO_DEAD)
                 SetPlayerState(CurrentPlayerState);
@@ -338,7 +346,7 @@ namespace Athena.Mario.Player
             StartCoroutine(MarioDeathSequence());
         }
 
-        public void SetEffect(PowerEffects effect,float time)
+        public void SetEffect(PowerEffects effect,float time=0f)
         {
             activeEffect = effect;
             switch (effect)
@@ -354,22 +362,23 @@ namespace Athena.Mario.Player
             }
         }
 
-        IEnumerator SInvEffect(float time)
+        private IEnumerator SInvEffect(float time)
         {
             IsInvincible = true;
+            
             var currTime = 0f;
             var currSwitchTime = 0f;
             var switchTime = 0.1f;
             var switchMode = false;
             while (currTime < time)
             {
-                var renderer = GetCurrentActiveRenderer();
+                var ren = GetCurrentActiveRenderer();
 
                 if (currSwitchTime >= switchTime)
                 {
                     switchMode = !switchMode;
                     currSwitchTime = 0f;
-                    renderer.color = switchMode? Color.red : Color.white;
+                    ren.color = switchMode? Color.red : Color.white;
                 }
                 currSwitchTime += Time.deltaTime;
                 currTime += Time.deltaTime;
@@ -377,11 +386,13 @@ namespace Athena.Mario.Player
             }
             ResetPlayerRenderers();
             IsInvincible = false;
+            SetEffect(PowerEffects.EFFECT_NONE);
         }
 
-        IEnumerator CInvEffect(float time)
+        private IEnumerator CInvEffect(float time)
         {
             IsInvincible = true;
+            Physics2D.IgnoreLayerCollision(10,11,true);
             var currTime = 0f;
             var currSwitchTime = 0f;
             var switchTime = 0.1f;
@@ -402,7 +413,9 @@ namespace Athena.Mario.Player
                 yield return null;
             }
             ResetPlayerRenderers();
+            Physics2D.IgnoreLayerCollision(10,11,false);
             IsInvincible = false;
+            SetEffect(PowerEffects.EFFECT_NONE);
         }
 
 

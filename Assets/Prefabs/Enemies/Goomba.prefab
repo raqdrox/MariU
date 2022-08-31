@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2576628459468615449}
   - component: {fileID: 2576628459468615448}
   - component: {fileID: 2576628459468615451}
+  - component: {fileID: 1994321830}
   m_Layer: 11
   m_Name: Goomba
   m_TagString: Untagged
@@ -119,19 +120,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 1
   activationPoint: {fileID: 0}
-  moveDirection: 1
+  deadAnimName: Dead
+  moveDirection: 3
   moveSpeed: 3
-  DetectLayer:
-    serializedVersion: 2
-    m_Bits: 3648
-  scSideStartOffset: 0.42
-  scSideEndOffset: 0.06
-  scTopOffset: 0.35
-  scBottomOffset: -0.35
-  tcTopStartOffset: 0.47
-  tcTopEndOffset: 0.04
-  tcLeftOffset: -0.35
-  tcRightOffset: 0.35
+  hitHandler: {fileID: 0}
+  currentHits: []
 --- !u!50 &2576628459468615448
 Rigidbody2D:
   serializedVersion: 4
@@ -151,7 +144,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &2576628459468615451
 BoxCollider2D:
@@ -166,7 +159,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0008559227, y: -0.00020980835}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -177,5 +170,26 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8765249, y: 0.9734483}
+  m_Size: {x: 0.96, y: 0.96}
   m_EdgeRadius: 0
+--- !u!114 &1994321830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2576628459468615455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c55723259dfdd7342beb9911b4232946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastValuesList: {fileID: 11400000, guid: 196c1da546a8e2540b2c5e2b8e6b9338, type: 2}
+  detectLayer:
+    serializedVersion: 2
+    m_Bits: 3648
+  terrainLayer:
+    serializedVersion: 2
+    m_Bits: 2112
+  showDebug: 1
+  position: {x: 0, y: 0, z: 0}

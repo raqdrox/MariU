@@ -1,20 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+namespace FrostyScripts.CameraScripts
 {
-    [SerializeField] Transform target;
-
-    private void Update()
+    public class CameraFollow : MonoBehaviour
     {
-        try
+        [SerializeField] private Transform target;
+        [SerializeField] private Vector3 targetOffset;
+        private void Update()
         {
-            transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
-        }
-        catch(MissingReferenceException)
-        {
-
+            try
+            {
+                var position = target.position;
+                var transform1 = transform;
+                transform1.position = new Vector3(position.x, position.y, transform1.position.z)+targetOffset;
+            }
+            catch(MissingReferenceException)
+            {
+                Debug.LogError("Missing Target");
+            }
         }
     }
 }

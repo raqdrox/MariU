@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5034553533704070885}
   - component: {fileID: 7357850644366461433}
   - component: {fileID: 2959143002634140257}
+  - component: {fileID: 1542062968}
   m_Layer: 11
   m_Name: Koopa
   m_TagString: Untagged
@@ -54,7 +55,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &5034553533704070885
 BoxCollider2D:
@@ -69,7 +70,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0008559227, y: -0.0035939217}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -80,7 +81,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8765249, y: 1.5008631}
+  m_Size: {x: 0.96, y: 0.96}
   m_EdgeRadius: 0
 --- !u!114 &7357850644366461433
 MonoBehaviour:
@@ -100,16 +101,14 @@ MonoBehaviour:
   moveDirection: 1
   moveSpeed: 3
   slideSpeed: 6
-  DetectLayer:
-    serializedVersion: 2
-    m_Bits: 3648
-  normalCollisionRaycastValues: {fileID: 11400000, guid: e0fc29ff850eeaa459c1d90972b6b489, type: 2}
+  hitHandler: {fileID: 0}
+  currentHits: []
   squashedAnimName: Squashed
   slideAnimName: Slide
   retAnimName: Return
   squashedReturnTime: 10
   returnAnimLength: 2
-  _state: 0
+  state: 0
 --- !u!95 &2959143002634140257
 Animator:
   serializedVersion: 3
@@ -129,6 +128,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1542062968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5034553533704070881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c55723259dfdd7342beb9911b4232946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastValuesList: {fileID: 11400000, guid: 196c1da546a8e2540b2c5e2b8e6b9338, type: 2}
+  detectLayer:
+    serializedVersion: 2
+    m_Bits: 3648
+  terrainLayer:
+    serializedVersion: 2
+    m_Bits: 2112
+  showDebug: 1
+  position: {x: 0, y: 0, z: 0}
 --- !u!1 &7357850644204529583
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +174,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7357850644204529583}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5034553533704070882}
@@ -200,7 +220,7 @@ SpriteRenderer:
   m_SortingLayerID: 2141596499
   m_SortingLayer: 3
   m_SortingOrder: 4
-  m_Sprite: {fileID: 8203917247392330234, guid: 0e0edccd8e922e249b49824a7fa695ac, type: 3}
+  m_Sprite: {fileID: -1646162936135731460, guid: 0e0edccd8e922e249b49824a7fa695ac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

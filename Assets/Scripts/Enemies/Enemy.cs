@@ -8,7 +8,7 @@ namespace Athena.Mario.Enemies
 {
     
     public abstract class Enemy : MonoBehaviour, IPopable
-    {
+    {//TODO : Refactor Base Class
         [SerializeField] protected bool isActive;
         [SerializeField] protected Transform activationPoint;
 
@@ -38,21 +38,7 @@ namespace Athena.Mario.Enemies
             deadAnimHash = Animator.StringToHash(deadAnimName);
         }
 
-        protected Tuple<PlayerController, RaycastHit2D> GetFirstPlayerFromRaycasts(params RaycastHit2D[] hitList)
-        {
-            foreach (var hit in hitList)
-            {
-                if (hit)
-                {
-                    if (hit.collider.gameObject.CompareTag("Player"))
-                    {
-                        Debug.Log("Player Check");
-                        return new Tuple<PlayerController, RaycastHit2D>(hit.collider.gameObject.GetComponent<PlayerController>(), hit);
-                    }
-                }
-            }
-            return null;
-        }
+        
         protected virtual void GetSquashed(bool hitRight)
         {
             Die(true, hitRight);
@@ -78,7 +64,7 @@ namespace Athena.Mario.Enemies
             collider.enabled = false;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             yield return new WaitForSeconds(1f);
-            Destroy(this);
+            Destroy(gameObject);
         }
         protected virtual IEnumerator PoppedDeath(bool dir=false)
         {
@@ -95,7 +81,7 @@ namespace Athena.Mario.Enemies
 
             yield return new WaitUntil(() => spriteRenderer.isVisible == false);
 
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }
