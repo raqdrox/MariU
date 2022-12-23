@@ -123,7 +123,7 @@ namespace Athena.Mario.Enemies
 
             var plrHitData = hList.FirstOrDefault(x => x.hitObject.CompareTag("Player"));
             if (plrHitData != null) {
-                var plrHit = plrHitData.hitObject.GetComponent<PlayerController>();
+                var plrHit = plrHitData.hitObject.GetComponent<PlayerManager>();
                 var hitSide = plrHitData.hitSide;
                 if (plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
                 {
@@ -200,7 +200,7 @@ namespace Athena.Mario.Enemies
             var plrHitData = hList.FirstOrDefault(x => x.hitObject.CompareTag("Player"));
             if (plrHitData == null) return false;
 
-            var plrHit = plrHitData.hitObject.GetComponent<PlayerController>();
+            var plrHit = plrHitData.hitObject.GetComponent<PlayerManager>();
             var hitDir = plrHitData.hitSide;
             if (plrHit == null) return false;
 

@@ -32,7 +32,7 @@ namespace Athena.Mario.Enemies
             
             if (plrHitData != null)
             { 
-                var plrHit = plrHitData.hitObject.GetComponent<PlayerController>();
+                var plrHit = plrHitData.hitObject.GetComponent<PlayerManager>();
                 var hitSide = plrHitData.hitSide;
                 if (!plrHit.IsEffectActive(PowerEffects.EFFECT_CINV) &&
                     !plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
@@ -75,7 +75,7 @@ namespace Athena.Mario.Enemies
             var plrHitData = hList.FirstOrDefault(x => x.hitObject.CompareTag("Player"));
             if (plrHitData == null) return false;
             
-            var plrHit = plrHitData.hitObject.GetComponent<PlayerController>();
+            var plrHit = plrHitData.hitObject.GetComponent<PlayerManager>();
             var hitSide = plrHitData.hitSide;
 
 
@@ -93,6 +93,7 @@ namespace Athena.Mario.Enemies
                 if (hitSide==Direction.TOP)
                 {
                     plrHit.BounceOff();
+                    
                     GetSquashed(true);
                 }
                 else

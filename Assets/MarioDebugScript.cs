@@ -10,13 +10,12 @@ namespace Athena.Mario.Misc
     {
         [SerializeField] Text Statetxt;
         [SerializeField] Text Effecttxt;
-        private PlayerController _currentPlayer;
+        private PlayerManager _currentPlayerManager;
 
         private void Start()
         {
-            _currentPlayer = FindObjectOfType<PlayerController>();
-            if(_currentPlayer!=null)
-                StateChangeDebug(_currentPlayer.CurrentPlayerState);
+            if(_currentPlayerManager!=null)
+                StateChangeDebug(_currentPlayerManager.PlayerInstance.CurrentPlayerState);
         }
 
         public void SetTimescale(float t)
@@ -26,18 +25,18 @@ namespace Athena.Mario.Misc
 
         public void StateChangeDebug(int stateId)
         {
-            _currentPlayer?.SetPlayerState((PlayerStates)stateId);
+            _currentPlayerManager?.PlayerInstance.SetPlayerState((PlayerStates)stateId);
             StateDebugUpdate();
         }
         public void StateChangeDebug(PlayerStates state)
         {
-            _currentPlayer?.SetPlayerState(state);
+            _currentPlayerManager?.PlayerInstance.SetPlayerState(state);
             StateDebugUpdate();
         }
 
         public void StateDebugUpdate()
         {
-            Statetxt.text = _currentPlayer != null?_currentPlayer.CurrentPlayerState.ToString(): Statetxt.text;
+            Statetxt.text = _currentPlayerManager != null?_currentPlayerManager.PlayerInstance.CurrentPlayerState.ToString(): Statetxt.text;
         }
         private void FixedUpdate()
         {
@@ -47,8 +46,12 @@ namespace Athena.Mario.Misc
         public void SetEffect(int effect)
         {
             Effecttxt.text = ((PowerEffects)effect).ToString();
-            _currentPlayer.SetEffect((PowerEffects)effect,10);
+            _currentPlayerManager.SetEffect((PowerEffects)effect,10);
         }
-        
+
+        public void BouncePlayer()
+        {
+            _currentPlayerManager.BounceOff();
+        }
     }
 }

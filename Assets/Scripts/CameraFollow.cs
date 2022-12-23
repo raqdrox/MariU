@@ -19,5 +19,6 @@ namespace FrostyScripts.CameraScripts
                 Debug.LogError("Missing Target");
             }
         }
+        
     }
 }

@@ -18,7 +18,7 @@ namespace Athena.Mario.Items
 
         protected override void PickupPayload(Collider2D picker)
         {
-            PlayerController player = picker.GetComponent<PlayerController>();
+            PlayerManager player = picker.GetComponent<PlayerManager>();
             player.PowerUp();
             OnPickupExpire();
         }
