@@ -50,7 +50,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,6 +96,8 @@ GameObject:
   - component: {fileID: 5191359843278576819}
   - component: {fileID: 5191359843278576714}
   - component: {fileID: 5106011492786298671}
+  - component: {fileID: 164115922799256285}
+  - component: {fileID: 121459241}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -154,6 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4559e2c59bfac574793442ba11cabd22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animController: {fileID: 121459241}
   moveSpeed: 10
   direction: {x: 0, y: 0}
   enableMovement: 1
@@ -185,21 +188,21 @@ MonoBehaviour:
   deadMarioRenderer: {fileID: 5191359843311314483}
   smallMarioColliderVals:
   - {x: 0, y: 0.35}
-  - {x: -0.15, y: 0.5}
-  - {x: -0.4, y: 0.5}
+  - {x: -0.15, y: 0.45}
+  - {x: -0.4, y: 0.45}
   - {x: -0.4, y: -0.5}
   - {x: 0.4, y: -0.5}
-  - {x: 0.4, y: 0.5}
-  - {x: 0.15, y: 0.5}
+  - {x: 0.4, y: 0.45}
+  - {x: 0.15, y: 0.45}
   - {x: 0, y: 0.35}
   bigMarioColliderVals:
   - {x: 0, y: 1.35}
-  - {x: -0.15, y: 1.5}
-  - {x: -0.4, y: 1.5}
+  - {x: -0.15, y: 1.45}
+  - {x: -0.4, y: 1.45}
   - {x: -0.4, y: -0.5}
   - {x: 0.4, y: -0.5}
-  - {x: 0.4, y: 1.5}
-  - {x: 0.15, y: 1.5}
+  - {x: 0.4, y: 1.45}
+  - {x: 0.15, y: 1.45}
   - {x: 0, y: 1.35}
   invTime: 5
 --- !u!95 &5191359843278576819
@@ -238,12 +241,12 @@ EdgeCollider2D:
   m_EdgeRadius: 0
   m_Points:
   - {x: 0, y: 0.35}
-  - {x: -0.15, y: 0.5}
-  - {x: -0.4, y: 0.5}
+  - {x: -0.15, y: 0.45}
+  - {x: -0.4, y: 0.45}
   - {x: -0.4, y: -0.5}
   - {x: 0.4, y: -0.5}
-  - {x: 0.4, y: 0.5}
-  - {x: 0.15, y: 0.5}
+  - {x: 0.4, y: 0.45}
+  - {x: 0.15, y: 0.45}
   - {x: 0, y: 0.35}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
@@ -262,6 +265,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInstance: {fileID: 5191359843278576820}
+  animController: {fileID: 121459241}
+--- !u!114 &164115922799256285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5191359843278576715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0f3201330d83d4f870230c9f6ee7ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInstance: {fileID: 5191359843278576820}
+  starEffectPalletes: []
+--- !u!114 &121459241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5191359843278576715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0f3201330d83d4f870230c9f6ee7ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInstance: {fileID: 5191359843278576820}
+  starEffectPalletes: []
 --- !u!1 &5191359843311314481
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +344,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -394,7 +426,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -476,7 +508,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

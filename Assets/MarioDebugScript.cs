@@ -8,10 +8,14 @@ namespace Athena.Mario.Misc
 {
     public class MarioDebugScript : MonoBehaviour
     {
+        public static MarioDebugScript Instance;
         [SerializeField] Text Statetxt;
         [SerializeField] Text Effecttxt;
-        private PlayerManager _currentPlayerManager;
-
+        [SerializeField]private PlayerManager _currentPlayerManager;
+void Awake()
+{
+    Instance = this;
+}
         private void Start()
         {
             if(_currentPlayerManager!=null)

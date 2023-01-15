@@ -66,5 +66,7 @@ namespace FrostyScripts.Misc
                 Vector3 viewportPoint = camera.WorldToViewportPoint(point);
                 return (viewportPoint.z > 0 && (new Rect(0, 0, 1, 1)).Contains(viewportPoint));
             }
+
+            
     }
 }

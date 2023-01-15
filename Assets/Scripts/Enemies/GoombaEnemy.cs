@@ -34,14 +34,14 @@ namespace Athena.Mario.Enemies
             { 
                 var plrHit = plrHitData.hitObject.GetComponent<PlayerManager>();
                 var hitSide = plrHitData.hitSide;
-                if (!plrHit.IsEffectActive(PowerEffects.EFFECT_CINV) &&
-                    !plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
+                if (!plrHit.IsEffectActive(PowerEffects.EFFECT_COOLDOWN) &&
+                    !plrHit.IsEffectActive(PowerEffects.EFFECT_STAR))
                 {
                     plrHit.GetHit();
                     return true;
                 }
 
-                if (plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
+                if (plrHit.IsEffectActive(PowerEffects.EFFECT_STAR))
                 {
                     var hitDir = plrHitData.hitSide == Direction.RIGHT;
                     StartCoroutine(PoppedDeath(hitDir));
@@ -80,11 +80,11 @@ namespace Athena.Mario.Enemies
 
 
 
-            if (plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
+            if (plrHit.IsEffectActive(PowerEffects.EFFECT_STAR))
             {
                 StartCoroutine(PoppedDeath());
             }
-            else if (plrHit.IsEffectActive(PowerEffects.EFFECT_CINV))
+            else if (plrHit.IsEffectActive(PowerEffects.EFFECT_COOLDOWN))
             {
                 return false;
             }

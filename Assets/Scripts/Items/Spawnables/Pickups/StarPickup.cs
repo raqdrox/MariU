@@ -30,7 +30,7 @@ namespace Athena.Mario.Items
         protected override void PickupPayload(Collider2D picker)
         {
             PlayerManager player = picker.GetComponent<PlayerManager>();
-            player.SetEffect(PowerEffects.EFFECT_SINV,20f);
+            player.SetEffect(PowerEffects.EFFECT_STAR,20f);
 
             OnPickupExpire();
         }

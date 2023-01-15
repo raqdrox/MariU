@@ -125,7 +125,7 @@ namespace Athena.Mario.Enemies
             if (plrHitData != null) {
                 var plrHit = plrHitData.hitObject.GetComponent<PlayerManager>();
                 var hitSide = plrHitData.hitSide;
-                if (plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
+                if (plrHit.IsEffectActive(PowerEffects.EFFECT_STAR))
                 {
                     var hitDir = plrHitData.hitSide == Direction.RIGHT;
                     GetPopped(hitDir);
@@ -204,11 +204,11 @@ namespace Athena.Mario.Enemies
             var hitDir = plrHitData.hitSide;
             if (plrHit == null) return false;
 
-            if (plrHit.IsEffectActive(PowerEffects.EFFECT_SINV))
+            if (plrHit.IsEffectActive(PowerEffects.EFFECT_STAR))
             {
                 StartCoroutine(PoppedDeath());
             }
-            else if (plrHit.IsEffectActive(PowerEffects.EFFECT_CINV))
+            else if (plrHit.IsEffectActive(PowerEffects.EFFECT_COOLDOWN))
             {
                 return false;
             }

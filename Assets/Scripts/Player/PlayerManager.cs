@@ -5,10 +5,24 @@ using UnityEngine;
 
 namespace Athena.Mario.Player
 {
+    public enum PlayerStates
+    {
+        MARIO_DEAD,
+        MARIO_SMALL,
+        MARIO_BIG,
+        MARIO_FIRE
+    }
+
+    public enum PowerEffects
+    {
+        EFFECT_NONE,
+        EFFECT_STAR,
+        EFFECT_COOLDOWN
+    }
     public class PlayerManager : MonoBehaviour
     {
         [SerializeField]private PlayerController playerInstance;
-
+        [SerializeField]PlayerAnimationController animController;
         public PlayerController PlayerInstance { get => playerInstance; set => playerInstance = value; }
 
 
@@ -39,12 +53,12 @@ namespace Athena.Mario.Player
             PlayerInstance.ActiveEffect = effect;
             switch (effect)
             {
-                case PowerEffects.EFFECT_SINV:
-                    StartCoroutine(SInvEffect(time));
+                case PowerEffects.EFFECT_STAR:
+                    StartCoroutine(StarEffect(time));
                     break;
 
-                case PowerEffects.EFFECT_CINV:
-                    StartCoroutine(CInvEffect(time));
+                case PowerEffects.EFFECT_COOLDOWN:
+                    StartCoroutine(CooldownEffect(time));
                     break;
                 default:
                     break;
@@ -54,11 +68,11 @@ namespace Athena.Mario.Player
         {
             return PlayerInstance.ActiveEffect == effect;
         }
-        private IEnumerator SInvEffect(float time)
+        private IEnumerator StarEffect(float time)
         {
             PlayerInstance.IsInvincible = true;
             
-            var currTime = 0f;
+            /* var currTime = 0f;
             var currSwitchTime = 0f;
             var switchTime = 0.1f;
             var switchMode = false;
@@ -75,16 +89,17 @@ namespace Athena.Mario.Player
                 currSwitchTime += Time.deltaTime;
                 currTime += Time.deltaTime;
                 yield return null;
-            }
-            PlayerInstance.ResetPlayerRenderers();
+            } */
+            animController.starFlash(playerInstance.GetCurrentActiveRenderer(),time,()=>PlayerInstance.ResetPlayerRenderers());
+            yield return new WaitForSeconds(time);
             PlayerInstance.IsInvincible = false;
             SetEffect(PowerEffects.EFFECT_NONE);
         }
-        private IEnumerator CInvEffect(float time)
+        private IEnumerator CooldownEffect(float time)
         {
             PlayerInstance.IsInvincible = true;
             Physics2D.IgnoreLayerCollision(10,11,true);
-            var currTime = 0f;
+            /* var currTime = 0f;
             var currSwitchTime = 0f;
             var switchTime = 0.1f;
             var switchMode = false;
@@ -102,8 +117,9 @@ namespace Athena.Mario.Player
                 currSwitchTime += Time.deltaTime;
                 currTime += Time.deltaTime;
                 yield return null;
-            }
-            PlayerInstance.ResetPlayerRenderers();
+            } */
+            animController.cooldownFlash(playerInstance.GetCurrentActiveRenderer(),time,()=>PlayerInstance.ResetPlayerRenderers());
+            yield return new WaitForSeconds(time);
             Physics2D.IgnoreLayerCollision(10,11,false);
             PlayerInstance.IsInvincible = false;
             SetEffect(PowerEffects.EFFECT_NONE);
@@ -145,7 +161,7 @@ namespace Athena.Mario.Player
             else
             {
                 PlayerInstance.SetPlayerState(PlayerStates.MARIO_SMALL);
-                SetEffect(PowerEffects.EFFECT_CINV, PlayerInstance.invTime);
+                SetEffect(PowerEffects.EFFECT_COOLDOWN, PlayerInstance.invTime);
             }
         }
 

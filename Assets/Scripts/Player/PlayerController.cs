@@ -8,24 +8,12 @@ using UnityEngine.UI;
 namespace Athena.Mario.Player
 {
 
-    public enum PlayerStates
-    {
-        MARIO_DEAD,
-        MARIO_SMALL,
-        MARIO_BIG,
-        MARIO_FIRE
-    }
-
-    public enum PowerEffects
-    {
-        EFFECT_NONE,
-        EFFECT_SINV,
-        EFFECT_CINV
-    }
+    
 
     public class PlayerController : MonoBehaviour
     {
         public static PlayerController instance;
+        [SerializeField]PlayerAnimationController animController;
         [Header("Horizontal Movement")]
         [SerializeField]
         private float moveSpeed = 10f;
@@ -45,7 +33,7 @@ namespace Athena.Mario.Player
         [Header("Components")]
         [SerializeField]
         public Rigidbody2D rb= null;
-        [SerializeField] private Animator animator=null;
+        [SerializeField] public Animator animator=null;
         [SerializeField] public EdgeCollider2D playerCollider;
         
 
@@ -132,7 +120,6 @@ namespace Athena.Mario.Player
             }
             
         }
-
         private void MoveCharacter(float horizontal)
         {
             changingDirection = (direction.x > 0 && rb.velocity.x < 0) || (direction.x < 0 && rb.velocity.x > 0);
@@ -148,11 +135,11 @@ namespace Athena.Mario.Player
 
             if (changingDirection)
             {
-                animator.SetBool("skid", true);   
+                animController.skid(true); 
             }
             else
             {
-                animator.SetBool("skid", false);
+                animController.skid(false); 
                 animator.SetFloat("horizontal", Mathf.Abs(rb.velocity.x));
             }
 
@@ -210,8 +197,6 @@ namespace Athena.Mario.Player
             Gizmos.DrawLine(transform.position - colliderOffset, transform.position - colliderOffset + Vector3.down * groundLength);
         }
         #endregion
-
-
         public SpriteRenderer GetCurrentActiveRenderer()
         {
             switch (CurrentPlayerState)
@@ -285,15 +270,5 @@ namespace Athena.Mario.Player
                     break;
             }
         }
-
-        
-
-        
-
-        
-
-        
-        
-        
     }
 }
