@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Athena.Mario.Entities;
+
 namespace Athena.Mario.Items
 {
     public class SpawnedCoin : MonoBehaviour, ISpawnableItem
@@ -12,8 +14,6 @@ namespace Athena.Mario.Items
         Vector3 startPos;
 
         //EventStuff
-
-
 
         private bool DoSpawnCycle = false;
         public bool NeedsSpawnCycle => DoSpawnCycle;

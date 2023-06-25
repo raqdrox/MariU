@@ -4,6 +4,7 @@ using UnityEngine;
 using Athena.Mario.Teleport;
 using Athena.Mario.Player;
 using Athena.Mario.Misc;
+using Athena.Mario.Entities;
 
 namespace Athena.Mario.Tiles
 {
@@ -13,6 +14,7 @@ namespace Athena.Mario.Tiles
         [SerializeField] private float pipeExitDistance=1f;
         [SerializeField] private Direction PipeDirection=Direction.DOWN;
         private bool exiting = false;
+        public override EntityIdentifierEnum entityIdentifier => EntityIdentifierEnum.TILE_PIPE;
 
         public static readonly Dictionary<Direction, KeyCode> DirectionKeyMap=new Dictionary<Direction, KeyCode>()
         {

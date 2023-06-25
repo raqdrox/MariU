@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Athena.Mario.Teleport
 {
-    public abstract class TeleportNode : MonoBehaviour
+    public abstract class TeleportNode : Entity
     {
         [SerializeField]private bool isEnterable = true;
 

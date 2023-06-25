@@ -4,11 +4,12 @@ using UnityEngine;
 using Athena.Mario.Player;
 using FrostyScripts.Misc;
 using UnityEngine.Events;
+using Athena.Mario.Entities;
 
 namespace Athena.Mario.Items
 {
-    public abstract class Pickup : MonoBehaviour, ISpawnableItem
-    { 
+    public abstract class Pickup : Entity, ISpawnableItem
+    {
         [SerializeField]protected bool isEnabled = false;
         [SerializeField]protected float _despawnTime = 30f;
         [SerializeField]protected bool neverDespawn = false;

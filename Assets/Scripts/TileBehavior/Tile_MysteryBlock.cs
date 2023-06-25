@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Athena.Mario.Items;
 using Athena.Mario.Player;
+using Athena.Mario.Entities;
+
 namespace Athena.Mario.Tiles
 {
     public enum MysteryItem
@@ -13,8 +15,10 @@ namespace Athena.Mario.Tiles
         MYS_POWERDOWN,
         MYS_STAR,
     }
-    public class Tile_MysteryBlock : MonoBehaviour
+    public class Tile_MysteryBlock : Entity
     {
+        public override EntityIdentifierEnum entityIdentifier => EntityIdentifierEnum.TILE_MYSBLOCK;
+
         bool isCollected = false;
         [SerializeField] float activationPower = 2f;
         [SerializeField] int MaxUses = 1;
@@ -75,10 +79,8 @@ namespace Athena.Mario.Tiles
                     break;
                 case MysteryItem.MYS_LIFE:
                     return;
-                    break;
                 case MysteryItem.MYS_POWERDOWN:
                     return;
-                    break;
                 case MysteryItem.MYS_STAR:
                     type = ItemType.ITEM_STAR;
                     break;

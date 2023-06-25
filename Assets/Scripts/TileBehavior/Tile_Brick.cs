@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Athena.Mario.Player;
+using Athena.Mario.Entities;
+
 namespace Athena.Mario.Tiles
 {
-    public class Tile_Brick : MonoBehaviour
+    public class Tile_Brick : Entity
     {
         [SerializeField] float activationPower = 2f;
         [SerializeField] GameObject brickSprite;
@@ -15,6 +17,8 @@ namespace Athena.Mario.Tiles
 
         Collider2D[] colliders;
         Animator animator;
+
+        public override EntityIdentifierEnum entityIdentifier => EntityIdentifierEnum.TILE_TERRAIN;
 
         private void Awake()
         {

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3ee1545aa00c300b8b3286b87197b3f, type: 3}
+  m_Name: EntityPalleteDataMap
+  m_EditorClassIdentifier: 
+  paletteDataMapList:
+  - key: 26
+    value: {fileID: 11400000, guid: b7203dfc240ed7191ab803d4ef965071, type: 2}
+  - key: 0
+    value: {fileID: 11400000, guid: 20234f33638911b9cbc1c9ce0f4c10b6, type: 2}
+  - key: 4
+    value: {fileID: 11400000, guid: 20234f33638911b9cbc1c9ce0f4c10b6, type: 2}

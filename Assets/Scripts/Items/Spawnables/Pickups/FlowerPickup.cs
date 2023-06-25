@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Athena.Mario.Player;
-using FrostyScripts.Misc;
+using Athena.Mario.Entities;
 
 namespace Athena.Mario.Items
 {
     class FlowerPickup : Pickup
     {
-
+        public override EntityIdentifierEnum entityIdentifier => EntityIdentifierEnum.ITEM_FLOWER;
 
         protected override void PickupPayload(Collider2D picker)
         {

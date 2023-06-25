@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Athena.Mario.Player;
 using FrostyScripts.Misc;
+using Athena.Mario.Entities;
 
 namespace Athena.Mario.Items
 {
@@ -15,6 +16,7 @@ namespace Athena.Mario.Items
         [SerializeField] private float topOffset = 0.5f;
         [SerializeField] private float bottomOffset = -0.5f;
 
+        public override EntityIdentifierEnum entityIdentifier => EntityIdentifierEnum.ITEM_MUSHROOM;
 
         protected override void PickupPayload(Collider2D picker)
         {

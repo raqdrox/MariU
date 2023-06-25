@@ -1,3 +1,4 @@
+using Athena.Mario.Entities;
 using Athena.Mario.Player;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +27,9 @@ namespace Athena.Mario.Items
         //Debug
         Color sideGizmoColor = Color.blue;
         Color groundGizmoColor = Color.blue;
-        
+
+        public override EntityIdentifierEnum entityIdentifier => EntityIdentifierEnum.ITEM_STAR;
+
         protected override void PickupPayload(Collider2D picker)
         {
             PlayerManager player = picker.GetComponent<PlayerManager>();
