@@ -15,6 +15,7 @@ namespace Athena.Mario.RenderScripts
         public void AddColor(Color color)
         {
             colors.Add(color);
+            
         }
 
         // Remove a color from the palette

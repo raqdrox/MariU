@@ -13,42 +13,57 @@ namespace Athena.Mario.RenderScripts
         public string name;
         public int paletteId;
     }
-
-    public class PaletteSetter : MonoBehaviour
+[ExecuteInEditMode]
+    public abstract class PaletteSetter : MonoBehaviour
     {
-        //TODO: Allow Any Entity Script to change palette by using SetPalette(string variantName)
-        [SerializeField]private EntityIdentifierEnum entityIdentifier;
-        private Renderer _renderer;
-        private PaletteManager _paletteManager;
-        [SerializeField]private float emissiveIntensity=1.0f;
-        [SerializeField]private EntityPaletteData paletteData; 
+        protected PaletteManager _paletteManager;
+        [SerializeField]protected float emissiveIntensity=1.0f;
+        [SerializeField]protected EntityPaletteData paletteData; 
 
-        [SerializeField]private string currentActiveVariant;
+        [SerializeField]protected string currentActiveVariant;
 
-        private void Awake()
+        [SerializeField]protected Material paletteMaterial;
+
+        virtual protected void Awake()
         {
-            _renderer = GetComponent<Renderer>();
             _paletteManager = PaletteManager.Instance;
+            
         }
 
+        abstract public void InitPalette();
+            
 
-        public void SetPalette(string variantName){
+        virtual public void SetPaletteByVariant(string variantName,Renderer renderer){
+            if(renderer==null) return;
             var variant= paletteData.GetPaletteVariant(variantName);
             if(variant.name=="invalid") return;
             currentActiveVariant=variantName;
-            SetPalette(variant.paletteId);
+            SetPaletteById(variant.paletteId,renderer);
         }
-        public void SetPalette(int id){
+        virtual public void SetPaletteById(int id,Renderer renderer){
             var paletteColors=_paletteManager?.GetPaletteColors(id);
-            SetPalette(paletteColors);
+            SetPaletteColors(paletteColors,renderer);
         }
         
-        public void SetPalette(List<Color> paletteColors){
-            _renderer.material.SetColor("_Color1", paletteColors[0]);
-            _renderer.material.SetColor("_Color2", paletteColors[1]);
-            _renderer.material.SetColor("_Color3", paletteColors[2]);
-            _renderer.material.SetColor("_Color4", paletteColors[3]);
+        virtual public void SetPaletteColors(List<Color> paletteColors,Renderer renderer){
+           
+ 
+
+            renderer.material.SetColor("_Color1", paletteColors[0]);
+            renderer.material.SetColor("_Color2", paletteColors[1]);
+            renderer.material.SetColor("_Color3", paletteColors[2]);
+            renderer.material.SetColor("_Color4", paletteColors[3]);
             
+        }
+
+
+
+        virtual public void SetEmissiveIntensity(float intensity,Renderer renderer){
+            if(renderer==null) return;
+            for(int i=1;i<=4;i++){
+                renderer.material.SetVector("_EmissionColor", Color.white * intensity);
+            }
+
         }
   }
 }

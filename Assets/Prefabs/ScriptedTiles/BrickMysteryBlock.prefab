@@ -31,6 +31,10 @@ PrefabInstance:
       propertyPath: m_RenderingLayerMask
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3222160254276420020, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3222160254276421195, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -97,7 +101,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3813937935020149426, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
       propertyPath: SpawnItemType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9040009667720405369, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
       propertyPath: m_Layer
@@ -113,3 +117,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
+--- !u!212 &3007544920354118460 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3222160254276420020, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
+  m_PrefabInstance: {fileID: 363555196543670920}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3007544920354118851 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3222160254276421195, guid: 43f78219812348c4ca68ea80d21a9bfe, type: 3}
+  m_PrefabInstance: {fileID: 363555196543670920}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2120616349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3007544920354118851}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f373f19c7c3687daf6e2a2c8a2cc10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emissiveIntensity: 1
+  paletteData: {fileID: 11400000, guid: 20234f33638911b9cbc1c9ce0f4c10b6, type: 2}
+  currentActiveVariant: overworld
+  paletteMaterial: {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
+  tileRenderer: {fileID: 3007544920354118460}

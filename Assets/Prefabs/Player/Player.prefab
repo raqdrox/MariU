@@ -99,7 +99,6 @@ GameObject:
   - component: {fileID: 5191359843278576714}
   - component: {fileID: 5106011492786298671}
   - component: {fileID: 164115922799256285}
-  - component: {fileID: 121459241}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -159,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4559e2c59bfac574793442ba11cabd22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animController: {fileID: 121459241}
+  animController: {fileID: 0}
   moveSpeed: 10
   direction: {x: 0, y: 0}
   enableMovement: 1
@@ -268,23 +267,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f362491e955d441abfbad22eaeda3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityIdentifier: 0
   playerInstance: {fileID: 5191359843278576820}
-  animController: {fileID: 121459241}
+  animController: {fileID: 0}
+  paletteSetter: {fileID: 0}
 --- !u!114 &164115922799256285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5191359843278576715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0f3201330d83d4f870230c9f6ee7ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInstance: {fileID: 5191359843278576820}
-  starEffectPalletes: []
---- !u!114 &121459241
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -83,7 +83,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 72b52d1f88d9103448d24079015893b7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
   UsedSprite: {fileID: 21300006, guid: 855dc7396df3c4e49ac4d21234eac5e1, type: 3}
   ItemSpawnPoint: {fileID: 3222160253147664490}
   spriteRenderer: {fileID: 3222160254276420020}
-  SpawnItemType: 1
+  SpawnItemType: 4
   Spawnables: {fileID: 11400000, guid: 16d37db2582cacd49afa85e87de44b59, type: 2}
   animator: {fileID: 3813937935020149390}
   coinAnimator: {fileID: 0}

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Athena.Mario.Entities;
+using Athena.Mario.RenderScripts;
 using UnityEngine;
 
 namespace Athena.Mario.Player
@@ -21,10 +23,12 @@ namespace Athena.Mario.Player
     }
     public class PlayerManager : MonoBehaviour
     {
+        public EntityIdentifierEnum entityIdentifier;
         [SerializeField]private PlayerController playerInstance;
         [SerializeField]PlayerAnimationController animController;
         public PlayerController PlayerInstance { get => playerInstance; set => playerInstance = value; }
 
+        public PlayerPaletteSetter paletteSetter;
 
         public void TogglePlayer(bool enable)
         {
@@ -145,18 +149,23 @@ namespace Athena.Mario.Player
             if (PlayerInstance.CurrentPlayerState == PlayerStates.MARIO_SMALL)
             {
                 PlayerInstance.SetPlayerState(PlayerStates.MARIO_BIG);
+                paletteSetter.SetVariant("base");
             }
             else
             {
                 PlayerInstance.SetPlayerState(PlayerStates.MARIO_FIRE);
+                paletteSetter.SetVariant("fire");
             }
 
         }
         public void PowerDown()
         {
+            paletteSetter.SetVariant("base");
+
             if (PlayerInstance.CurrentPlayerState == PlayerStates.MARIO_SMALL)
             {
                 PlayerInstance.SetPlayerState(PlayerStates.MARIO_DEAD);
+                PlayerDie();
             }
             else
             {

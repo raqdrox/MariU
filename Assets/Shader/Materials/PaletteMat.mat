@@ -51,6 +51,7 @@ Material:
     m_Ints: []
     m_Floats:
     - Boolean_87ea0977f4e9404e81ac9c8cb29a8620: 1
+    - _ColorIntensity: 1
     - _EnableExternalAlpha: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
