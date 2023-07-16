@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3222160254276421194}
   - component: {fileID: 3222160254276420020}
+  - component: {fileID: 2022157059}
   m_Layer: 9
   m_Name: MysteryBlockSprite
   m_TagString: Untagged
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 72b52d1f88d9103448d24079015893b7, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -115,6 +116,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2022157059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3222160254276421195}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f373f19c7c3687daf6e2a2c8a2cc10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emissiveIntensity: 1
+  paletteData: {fileID: 11400000, guid: 20234f33638911b9cbc1c9ce0f4c10b6, type: 2}
+  currentActiveVariant: overworld
+  paletteMaterial: {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
+  tileRenderer: {fileID: 3222160254276420020}
 --- !u!1 &3813937935020149388
 GameObject:
   m_ObjectHideFlags: 0

@@ -123,7 +123,8 @@ namespace Athena.Mario.Tiles
         {
 
             isCollected = true;
-            animator.SetBool("isUsed", true);
+            //TODO: Add Used Sprite
+            //animator.SetBool("isUsed", true);
             ResetBlockPos();
             spriteRenderer.sprite = UsedSprite;
         }
