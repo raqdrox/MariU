@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Athena.Mario.Entities;
+using DG.Tweening;
+using Athena.Mario.RenderScripts;
 
 namespace Athena.Mario.Items
 {
@@ -10,8 +12,16 @@ namespace Athena.Mario.Items
         [SerializeField] int pointVal = 100;
         [SerializeField] Vector3 moveHeight;
         [SerializeField] Vector3 destroyHeight;
-        [SerializeField] float moveTime;
-        Vector3 startPos;
+        [SerializeField] float moveTime = 10f;
+        
+        [SerializeField] List<string> coinPaletteVariants = new();
+        [SerializeField] List<Sprite> coinSpriteVariants = new();
+
+        [SerializeField] TilePaletteSetter tilePaletteSetter;
+        [SerializeField] float coinSpriteStateTime = 0.3f;
+
+        [SerializeField] SpriteRenderer spriteRenderer;
+
 
         //EventStuff
 
@@ -21,41 +31,55 @@ namespace Athena.Mario.Items
         public void OnEndSpawn() { }
 
         public void OnStartSpawn()
-        {
-            startPos = transform.position;
-            GetComponent<Animator>().SetTrigger("coin");
-            //StartCoroutine(CoinAnim());
-            //add event stuff
+        {            
+
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            tilePaletteSetter = GetComponent<TilePaletteSetter>();
+            tilePaletteSetter.SetVariant(coinPaletteVariants[0]);
+            spriteRenderer.sprite = coinSpriteVariants[2];
+
+
+            Sequence shineSequence=DOTween.Sequence()
+            .AppendInterval(coinSpriteStateTime)
+            .AppendCallback(()=>{
+            tilePaletteSetter.SetVariant(coinPaletteVariants[0]);
+            spriteRenderer.sprite = coinSpriteVariants[0];
+            })
+            .AppendInterval(coinSpriteStateTime)
+            .AppendCallback(()=>{
+            tilePaletteSetter.SetVariant(coinPaletteVariants[1]);
+            spriteRenderer.sprite = coinSpriteVariants[1];
+            })
+            .AppendInterval(coinSpriteStateTime)
+            .AppendCallback(()=>{
+            tilePaletteSetter.SetVariant(coinPaletteVariants[2]);
+            spriteRenderer.sprite = coinSpriteVariants[2];
+            })
+            .AppendInterval(coinSpriteStateTime)
+            .AppendCallback(()=>{
+            tilePaletteSetter.SetVariant(coinPaletteVariants[3]);
+            spriteRenderer.sprite = coinSpriteVariants[3];
+            
+            })
+            .AppendInterval(coinSpriteStateTime)
+            .SetLoops(1)
+            .Play();
+
+            Vector3 startPos = transform.position;
+            transform.DOMove(transform.position + moveHeight, moveTime)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(()=>transform.DOMove(startPos+ destroyHeight, moveTime)
+            .SetEase(Ease.InQuad).OnComplete(()=>{
+                shineSequence.Kill();
+                Destroy(gameObject);
+                }));
+
+            
+            
         }
 
-        public void OnAnimEnd()
-        {
-            //show text here
-            Destroy(gameObject);
-        }
 
-        IEnumerator CoinAnim()
-        {
-            float currentMovementTime = 0f;
-            while (Vector3.Distance(transform.position, startPos + moveHeight) > 0)
-            {
-                Debug.Log("UP");
-                currentMovementTime += Time.deltaTime;
-                transform.position = Vector3.Lerp(startPos, startPos + moveHeight, currentMovementTime / moveTime);
-                yield return null;
-            }
-            currentMovementTime = 0f;
-            while (Vector3.Distance(startPos+destroyHeight,transform.position) > 0)
-            {
-                Debug.Log("Down");
-                currentMovementTime += Time.deltaTime;
-                transform.position = Vector3.Lerp(startPos + moveHeight, startPos+ destroyHeight, (currentMovementTime / moveTime)* (moveHeight.y/destroyHeight.y));
-                yield return null;
-            }
 
-            //Show Points gained
-
-            Destroy(gameObject);
-        }
+        
     }
 }

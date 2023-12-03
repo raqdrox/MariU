@@ -4,6 +4,7 @@ using UnityEngine;
 using Athena.Mario.Items;
 using Athena.Mario.Player;
 using Athena.Mario.Entities;
+using DG.Tweening;
 
 namespace Athena.Mario.Tiles
 {
@@ -29,7 +30,6 @@ namespace Athena.Mario.Tiles
 
         [SerializeField] MysteryItem SpawnItemType;
         [SerializeField] SpawnableData Spawnables;
-        [SerializeField] Animator animator;
         [SerializeField] Animator coinAnimator;
         [SerializeField] float itemSpawnTime = 5f;
         
@@ -38,6 +38,7 @@ namespace Athena.Mario.Tiles
         private void Awake()
         {
             blockIdlePos = transform.position;
+
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -62,7 +63,12 @@ namespace Athena.Mario.Tiles
             {
                 SetBlockUsed();
             }
-            animator.SetTrigger("bump");
+            // animator.SetTrigger("bump");
+
+            //TODO: Add Bump Animation
+            Bump();
+
+
             ItemType type=ItemType.ITEM_MUSHROOM;
             switch (SpawnItemType)
             {
@@ -95,7 +101,12 @@ namespace Athena.Mario.Tiles
             { StartCoroutine(ItemSpawnSequence(spawnedObj)); }
         }
 
-    
+        void Bump()
+        {
+            //DOtween Bump block like in Mario
+            spriteRenderer.transform.DOBlendableMoveBy(new Vector3(0, 0.5f, 0), 0.2f).SetEase(Ease.OutQuad).OnComplete(() => spriteRenderer.transform.DOBlendableMoveBy(new Vector3(0, -0.5f, 0), 0.2f).SetEase(Ease.InQuad));
+            
+        }
 
         IEnumerator ItemSpawnSequence(GameObject spawnedObj)
         {
