@@ -36,8 +36,8 @@ namespace Athena.Mario.Items
             spriteRenderer = GetComponent<SpriteRenderer>();
             tilePaletteSetter = GetComponent<TilePaletteSetter>();
             tilePaletteSetter.SetVariant(coinPaletteVariants[0]);
-            spriteRenderer.sprite = coinSpriteVariants[2];
 
+            
 
             Sequence shineSequence=DOTween.Sequence()
             .AppendInterval(coinSpriteStateTime)
@@ -59,20 +59,21 @@ namespace Athena.Mario.Items
             .AppendCallback(()=>{
             tilePaletteSetter.SetVariant(coinPaletteVariants[3]);
             spriteRenderer.sprite = coinSpriteVariants[3];
-            
             })
             .AppendInterval(coinSpriteStateTime)
-            .SetLoops(1)
+            .SetLoops(-1)
             .Play();
 
             Vector3 startPos = transform.position;
+
             transform.DOMove(transform.position + moveHeight, moveTime)
             .SetEase(Ease.OutQuad)
             .OnComplete(()=>transform.DOMove(startPos+ destroyHeight, moveTime)
             .SetEase(Ease.InQuad).OnComplete(()=>{
                 shineSequence.Kill();
                 Destroy(gameObject);
-                }));
+                }))
+                .Play();
 
             
             

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2576628459468615448}
   - component: {fileID: 2576628459468615451}
   - component: {fileID: 1994321830}
+  - component: {fileID: 2619721222966198512}
   m_Layer: 11
   m_Name: Goomba
   m_TagString: Untagged
@@ -29,12 +30,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2576628459468615455}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.503, y: -3.487, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2576628459468615453
 SpriteRenderer:
@@ -47,6 +49,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -55,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -89,7 +92,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &2576628459468615450
 Animator:
-  serializedVersion: 3
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,10 +105,12 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2576628459468615449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,8 +128,10 @@ MonoBehaviour:
   deadAnimName: Dead
   moveDirection: 3
   moveSpeed: 3
-  hitHandler: {fileID: 0}
+  hitHandler: {fileID: 1994321830}
   currentHits: []
+  animSpeed: 0.2
+  squashedSprite: {fileID: -6949527019116515464, guid: 0e0edccd8e922e249b49824a7fa695ac, type: 3}
 --- !u!50 &2576628459468615448
 Rigidbody2D:
   serializedVersion: 4
@@ -142,6 +149,12 @@ Rigidbody2D:
   m_AngularDrag: 0
   m_GravityScale: 60
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -156,6 +169,25 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -193,3 +225,20 @@ MonoBehaviour:
     m_Bits: 2112
   showDebug: 1
   position: {x: 0, y: 0, z: 0}
+--- !u!114 &2619721222966198512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2576628459468615455}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f373f19c7c3687daf6e2a2c8a2cc10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emissiveIntensity: 1
+  paletteData: {fileID: 11400000, guid: 4f032ecd67de1a5c1bd566e07792552c, type: 2}
+  currentActiveVariant: overworld
+  paletteMaterial: {fileID: -876546973899608171, guid: 65008085069827448b8d78e64dd70543, type: 3}
+  tileRenderer: {fileID: 2576628459468615453}

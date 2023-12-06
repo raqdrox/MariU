@@ -53,9 +53,9 @@ namespace Athena.Mario.RenderScripts
                 col.a = alpha;
                 palColors.Add(col);
             }
-            if(palColors.Count<4)
+            if(palColors.Count<5)
             {
-                for (int i = palColors.Count; i < 4; i++)
+                for (int i = palColors.Count; i < 5; i++)
                 {
                     palColors.Add(Color.black);
                 }

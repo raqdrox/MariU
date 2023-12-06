@@ -30,8 +30,9 @@ namespace Athena.Mario.Tiles
 
         [SerializeField] MysteryItem SpawnItemType;
         [SerializeField] SpawnableData Spawnables;
-        [SerializeField] Animator coinAnimator;
         [SerializeField] float itemSpawnTime = 5f;
+
+        [SerializeField] Vector3 spawnStartPosOffset = new Vector3(0, 0.5f, 0);
         
         Vector3 blockIdlePos;
 
@@ -69,7 +70,7 @@ namespace Athena.Mario.Tiles
             Bump();
 
 
-            ItemType type=ItemType.ITEM_MUSHROOM;
+            ItemType type=ItemType.ITEM_MUSHROOM_GOOD;
             switch (SpawnItemType)
             {
                 case MysteryItem.MYS_COIN:
@@ -79,14 +80,16 @@ namespace Athena.Mario.Tiles
                     break;
                 case MysteryItem.MYS_POWERUP:
                     if (plr.CurrentPlayerState == PlayerStates.MARIO_SMALL)
-                        type = ItemType.ITEM_MUSHROOM;
+                        type = ItemType.ITEM_MUSHROOM_GOOD;
                     else
                         type = ItemType.ITEM_FLOWER;
                     break;
                 case MysteryItem.MYS_LIFE:
-                    return;
+                    type = ItemType.ITEM_MUSHROOM_LIFE;
+                    break;
                 case MysteryItem.MYS_POWERDOWN:
-                    return;
+                    type = ItemType.ITEM_MUSHROOM_BAD;
+                    break;
                 case MysteryItem.MYS_STAR:
                     type = ItemType.ITEM_STAR;
                     break;
@@ -94,11 +97,11 @@ namespace Athena.Mario.Tiles
                     break;
             }
             
-            var spawnedObj = Instantiate(Spawnables.GetPrefabFor(type), blockIdlePos, ItemSpawnPoint.rotation);
+            var spawnedObj = Instantiate(Spawnables.GetPrefabFor(type), blockIdlePos + spawnStartPosOffset, ItemSpawnPoint.rotation);
             var spawnedItem = spawnedObj.GetComponent<ISpawnableItem>();
             spawnedItem.OnStartSpawn();
             if (spawnedItem.NeedsSpawnCycle)
-            { StartCoroutine(ItemSpawnSequence(spawnedObj)); }
+            { ItemSpawnSequence(spawnedObj); }
         }
 
         void Bump()
@@ -108,18 +111,10 @@ namespace Athena.Mario.Tiles
             
         }
 
-        IEnumerator ItemSpawnSequence(GameObject spawnedObj)
+        void ItemSpawnSequence(GameObject spawnedObj)
         {
-            float currentMovementTime = 0f;
-            while (Vector3.Distance(spawnedObj.transform.position, ItemSpawnPoint.position) > 0)
-            {
-                currentMovementTime += Time.deltaTime;
-                spawnedObj.transform.position = Vector3.Lerp(blockIdlePos, ItemSpawnPoint.position, currentMovementTime / itemSpawnTime);
-
-                //transform.position = Vector3.Lerp(blockIdlePos, ItemSpawnPoint.position, currentMovementTime / itemSpawnTime);//Funny Mistake
-                yield return null;
-            }
-            EnableSpawnedItem(spawnedObj);
+            // move the item up to the spawn point
+            spawnedObj.transform.DOMove(ItemSpawnPoint.position, itemSpawnTime).SetEase(Ease.OutQuad).OnComplete(() => EnableSpawnedItem(spawnedObj));
         }
 
         void EnableSpawnedItem(GameObject spawnedObj)

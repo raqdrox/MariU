@@ -13,12 +13,10 @@ namespace Athena.Mario.Enemies
         [SerializeField] protected Transform activationPoint;
 
         protected Rigidbody2D rb;
-        protected Animator animator;
         protected SpriteRenderer spriteRenderer;
         protected bool isDead = false;
 
         [SerializeField]protected string deadAnimName = "Dead";
-        protected int deadAnimHash;
 
         public virtual void PopThis(bool dir)
         {
@@ -32,10 +30,7 @@ namespace Athena.Mario.Enemies
             spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer == null)
                 spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            animator = GetComponent<Animator>();
-            if (animator == null)
-                animator = GetComponentInChildren<Animator>();
-            deadAnimHash = Animator.StringToHash(deadAnimName);
+            
         }
 
         
@@ -58,7 +53,6 @@ namespace Athena.Mario.Enemies
 
         protected virtual IEnumerator SquashDeath(bool dir = false)
         {
-            animator.SetTrigger(deadAnimHash);
             isDead = true;
             Collider2D collider = GetComponent<Collider2D>();
             collider.enabled = false;

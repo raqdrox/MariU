@@ -4,6 +4,7 @@ using UnityEngine;
 using Athena.Mario.Player;
 using FrostyScripts.Misc;
 using Athena.Mario.Entities;
+using Athena.Mario.RenderScripts;
 
 namespace Athena.Mario.Items
 {
@@ -16,15 +17,64 @@ namespace Athena.Mario.Items
         [SerializeField] private float topOffset = 0.5f;
         [SerializeField] private float bottomOffset = -0.5f;
 
+        [SerializeField] ItemType mushroomType = ItemType.ITEM_MUSHROOM_GOOD;
+
+        [SerializeField] private TilePaletteSetter tilePaletteSetter;
+
+        public void Start()
+        {
+            tilePaletteSetter = GetComponent<TilePaletteSetter>();
+            SetMushroomType(mushroomType);
+
+        }
+
+        public void SetMushroomType(ItemType type)
+        {
+            mushroomType = type;
+            switch (mushroomType)
+            {
+                case ItemType.ITEM_MUSHROOM_GOOD:
+                    break;
+                case ItemType.ITEM_MUSHROOM_BAD:
+                    tilePaletteSetter.SetVariant("bad");
+                    break;
+                case ItemType.ITEM_MUSHROOM_LIFE:
+                    tilePaletteSetter.SetVariant("lifeup");
+                    break;
+                default:
+                    break;
+            }
+        }
         public override EntityIdentifierEnum entityIdentifier => EntityIdentifierEnum.ITEM_MUSHROOM;
 
+        
         protected override void PickupPayload(Collider2D picker)
         {
             PlayerManager player = picker.GetComponent<PlayerManager>();
-            player.PowerUp();
+
+            switch (mushroomType)
+            {
+                
+                case ItemType.ITEM_MUSHROOM_GOOD:
+                    player?.PowerUp();
+                    break;
+                case ItemType.ITEM_MUSHROOM_BAD:
+                    player?.PowerDown();
+                    break;
+
+                case ItemType.ITEM_MUSHROOM_LIFE:
+                    player?.OneUp();
+                    break;
+
+                default:
+                    break;
+            }
+            
             OnPickupExpire();
         }
 
+        
+        
         public override void EnablePickup(bool enable)
         {
             base.EnablePickup(enable);
@@ -35,6 +85,7 @@ namespace Athena.Mario.Items
             collider.enabled = enable;
             trigger.enabled = enable;
             rb.constraints = enable? RigidbodyConstraints2D.FreezeRotation:RigidbodyConstraints2D.FreezeAll;
+            
 
         }
 
@@ -65,4 +116,6 @@ namespace Athena.Mario.Items
         }
 
     }
+
+   
 }

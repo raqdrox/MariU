@@ -174,5 +174,12 @@ namespace Athena.Mario.Player
             }
         }
 
+        public void OneUp()
+        {
+            //gameManager.AddLife();
+            
+
+        }
+
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,8 +26,12 @@ namespace Athena.Mario.RenderScripts
 
         public void SetVariant(string variantName){
             SetPaletteByVariant(variantName,tileRenderer);
-
         }
+
+        public string GetPaletteVariantName(){
+            return currentActiveVariant;
+        }
+
 
         private void SetTileEmissiveIntensity(float intensity){
             SetEmissiveIntensity(intensity,tileRenderer);

@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fa725f78cf213d00a0b2f4ea26bf211, type: 3}
+  m_Name: FlowerPaletteData
+  m_EditorClassIdentifier: 
+  variantData:
+  - name: water1
+    paletteId: 5
+  - name: water2
+    paletteId: 5
+  - name: water3
+    paletteId: 5
+  - name: water4
+    paletteId: 5
+  - name: overworld1
+    paletteId: 13
+  - name: overworld2
+    paletteId: 3
+  - name: overworld3
+    paletteId: 14
+  - name: overworld4
+    paletteId: 15
+  - name: castle1
+    paletteId: 12
+  - name: castle2
+    paletteId: 12
+  - name: castle3
+    paletteId: 12
+  - name: castle4
+    paletteId: 12
+  - name: underground1
+    paletteId: 2
+  - name: underground2
+    paletteId: 2
+  - name: underground3
+    paletteId: 2
+  - name: underground4
+    paletteId: 2
+  - name: overworld
+    paletteId: 13
+  - name: underground1
+    paletteId: 2
+  - name: castle
+    paletteId: 12
+  - name: water
+    paletteId: 5

@@ -53,6 +53,7 @@ namespace Athena.Mario.RenderScripts
             renderer.material.SetColor("_Color2", paletteColors[1]);
             renderer.material.SetColor("_Color3", paletteColors[2]);
             renderer.material.SetColor("_Color4", paletteColors[3]);
+            renderer.material.SetColor("_Color5", paletteColors[4]);
             
         }
 
@@ -60,7 +61,7 @@ namespace Athena.Mario.RenderScripts
 
         virtual public void SetEmissiveIntensity(float intensity,Renderer renderer){
             if(renderer==null) return;
-            for(int i=1;i<=4;i++){
+            for(int i=1;i<=5;i++){
                 renderer.material.SetVector("_EmissionColor", Color.white * intensity);
             }
 

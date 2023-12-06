@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: MysteryBlockSpawns
   m_EditorClassIdentifier: 
   ItemMap:
-  - Type: 1
-    ItemPrefab: {fileID: 243324319425499460, guid: 1288afba20fea6b4593a83fb2dac5579, type: 3}
-  - Type: 2
+  - Type: 4
     ItemPrefab: {fileID: 6365764825091029810, guid: 29a3386a6a7ff03418fa3880824b1bc6, type: 3}
   - Type: 0
     ItemPrefab: {fileID: 5303345617331064474, guid: 7f8c86daafa109e4eb914cf387514e81, type: 3}
-  - Type: 3
+  - Type: 5
     ItemPrefab: {fileID: 243324319425499460, guid: 21d0a2c35fecf3c4d99a44ece5d5e70e, type: 3}
+  - Type: 1
+    ItemPrefab: {fileID: 2326951086608310553, guid: ee3f9b98b24bf4314a7a9489221d41a8, type: 3}
+  - Type: 2
+    ItemPrefab: {fileID: 2326951086608310553, guid: c93114e36057c0281b9364a5debb0a9e, type: 3}
+  - Type: 3
+    ItemPrefab: {fileID: 2326951086608310553, guid: ada5d35f20b21ed3ea0d2fa9a483e0e6, type: 3}

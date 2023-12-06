@@ -7,6 +7,7 @@ using System.Linq;
 using Athena.Mario.Misc;
 using FrostyScripts.Misc;
 using UnityEngine.Serialization;
+using DG.Tweening;
 
 namespace Athena.Mario.Enemies
 {
@@ -17,7 +18,7 @@ namespace Athena.Mario.Enemies
             {
                 prevMoveDirection = moveDirection;
                 moveDirection = value;
-                spriteRenderer.flipX = (value==Direction.RIGHT);
+                spriteRenderer.flipX = value==Direction.RIGHT;
             }
         }
 
@@ -25,39 +26,32 @@ namespace Athena.Mario.Enemies
         public Direction moveDirection = 0;
         [SerializeField] float moveSpeed = 1f;
         [SerializeField] float slideSpeed = 2f;
-       
+
+        private Sequence moveSequenceAnim;
+        [SerializeField] float animSpeed = 0.2f;
 
         [SerializeField] private HitHandler hitHandler;
         [SerializeField] private List<HitData> currentHits;
         
-        [SerializeField] private string squashedAnimName = "Squashed";
-        private int squashedAnimHash;
-        [SerializeField] private string slideAnimName = "Slide";
-        private int slideAnimHash;
-        [SerializeField] private string retAnimName = "Return";
-        private int retAnimHash;
 
         [SerializeField] private float squashedReturnTime = 10f;
         [SerializeField] private float returnAnimLength = 2f;
         
+        [SerializeField] private Sprite[] shellSprites;
+        [SerializeField] private Sprite[] normalSprites;
 
         [SerializeField] private KoopaState state;
         private Coroutine squashedEnumerator;
-        private void InitAnim()
-        {
-            squashedAnimHash = Animator.StringToHash(squashedAnimName);
-            slideAnimHash = Animator.StringToHash(slideAnimName);
-            retAnimHash = Animator.StringToHash(retAnimName);
-        }
+        
 
         protected override void Awake()
         {
             base.Awake();
             if (hitHandler == null)
                 hitHandler = GetComponent<HitHandler>();
-            InitAnim();
             MoveDirection = Direction.RIGHT;
             State = KoopaState.KOOPA_NORMAL;
+            MoveAnimation();
         }
 
         private KoopaState State
@@ -76,15 +70,20 @@ namespace Athena.Mario.Enemies
 
                             MoveDirection = (new System.Random().Next(1, 2) == 2 )? Direction.RIGHT : Direction.LEFT;
                         }
+                        MoveAnimation();
+                        spriteRenderer.sprite = normalSprites[0];
                         break;
                     case KoopaState.KOOPA_SQUASHED:
+                        moveSequenceAnim?.Kill();
                         MoveDirection = 0;
                         rb.velocity=Vector2.zero;
                         rb.isKinematic = true;
-                        animator.SetTrigger(squashedAnimHash);
+                        spriteRenderer.sprite = shellSprites[0];
                         squashedEnumerator = StartCoroutine(SquashedEnumerator());
+
                         break;
                     case KoopaState.KOOPA_SLIDING:
+                        moveSequenceAnim?.Kill();
                         rb.isKinematic = false;
                         StopCoroutine(squashedEnumerator);
                         squashedEnumerator = null;
@@ -93,7 +92,7 @@ namespace Athena.Mario.Enemies
                             var random = new System.Random();
                             MoveDirection = (random.Next(2) == 1) ? Direction.RIGHT : Direction.LEFT;
                         }
-                        animator.SetTrigger(slideAnimHash);
+                        spriteRenderer.sprite = shellSprites[0];
                         break;
                     default:
                         break; 
@@ -104,11 +103,23 @@ namespace Athena.Mario.Enemies
         private IEnumerator SquashedEnumerator()
         {
             yield return new WaitForSeconds(squashedReturnTime);
-
-            animator.SetTrigger(retAnimHash);
+            //animate shell sprites
+            Sequence sequence=DOTween.Sequence()
+            .AppendCallback(() =>
+            {
+                spriteRenderer.sprite = shellSprites[0];
+            })
+            .AppendInterval(0.2f)
+            .AppendCallback(() =>
+            {
+                spriteRenderer.sprite = shellSprites[1];
+            })
+            .AppendInterval(0.2f)
+            .SetLoops(-1)
+            .Play();
 
             yield return new WaitForSeconds(returnAnimLength);
-
+            sequence.Kill();
             State = KoopaState.KOOPA_NORMAL;
         }
         
@@ -275,6 +286,27 @@ namespace Athena.Mario.Enemies
                     rb.velocity = HitHandler.DirectionMap[MoveDirection] * slideSpeed;
                     break;
             }
+        }
+    
+    void MoveAnimation()
+        {
+            moveSequenceAnim?.Kill();
+            moveSequenceAnim = DOTween.Sequence()
+                .AppendCallback(() =>
+                {
+                    spriteRenderer.sprite = normalSprites[0];
+                })
+                .AppendInterval(animSpeed)
+                .AppendCallback(() =>
+                {
+                    spriteRenderer.sprite = normalSprites[1];
+
+                })
+                .AppendInterval(animSpeed)
+                .SetLoops(-1)
+                .Play();
+
+            
         }
     }
 

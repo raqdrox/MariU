@@ -1,5 +1,7 @@
 using Athena.Mario.Entities;
 using Athena.Mario.Player;
+using Athena.Mario.RenderScripts;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +32,18 @@ namespace Athena.Mario.Items
 
         public override EntityIdentifierEnum entityIdentifier => EntityIdentifierEnum.ITEM_STAR;
 
+        [SerializeField]float animSpeed=0.2f;
+
+        public TilePaletteSetter paletteSetter;
+
+        override protected void Awake()
+        {
+            base.Awake();
+            if (paletteSetter == null)
+                paletteSetter=GetComponent<TilePaletteSetter>();
+            SetupAnimation();
+            
+        }
         protected override void PickupPayload(Collider2D picker)
         {
             PlayerManager player = picker.GetComponent<PlayerManager>();
@@ -109,6 +123,35 @@ namespace Athena.Mario.Items
             Gizmos.color = groundGizmoColor;
             Gizmos.DrawLine(gleftPos, gleftPos + (Vector3.down * gcBotOffset));
             Gizmos.DrawLine(grightPos, grightPos + (Vector3.down * gcBotOffset));
+        }
+
+        public void SetupAnimation()
+        {
+            string variantName = paletteSetter.GetPaletteVariantName();
+
+            //loop through 1 - 4 variants 
+            Sequence shineSequence=DOTween.Sequence()
+            .AppendCallback(()=>{
+            paletteSetter.SetVariant(variantName + "1");
+            })
+            .AppendInterval(animSpeed)
+            .AppendCallback(()=>{
+            paletteSetter.SetVariant(variantName + "2");
+            })
+            .AppendInterval(animSpeed)
+            .AppendCallback(()=>{
+            paletteSetter.SetVariant(variantName + "3");
+            })
+            .AppendInterval(animSpeed)
+            .AppendCallback(()=>{
+            paletteSetter.SetVariant(variantName + "4");
+            })
+            .AppendInterval(animSpeed)
+            .SetLoops(-1)
+            .Play();
+
+
+
         }
     }
 }

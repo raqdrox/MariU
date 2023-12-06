@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5303345617331064475}
   - component: {fileID: 5303345617331064472}
-  - component: {fileID: 2336945982842787819}
   - component: {fileID: 6522326553316297592}
   - component: {fileID: 3060440879821035624}
   m_Layer: 7
@@ -87,27 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &2336945982842787819
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5303345617331064474}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 805b6dabcb05c644a8fe682eb1fe2604, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6522326553316297592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,9 +99,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointVal: 100
-  moveHeight: {x: 0, y: 2, z: 0}
+  moveHeight: {x: 0, y: 2.5, z: 0}
   destroyHeight: {x: 0, y: 1, z: 0}
-  moveTime: 1
+  moveTime: 0.2
   coinPaletteVariants:
   - a
   - b
@@ -135,7 +113,7 @@ MonoBehaviour:
   - {fileID: -2076234102, guid: cbe738a6b31804fbfa01d65f850d595b, type: 3}
   - {fileID: -241535023, guid: cbe738a6b31804fbfa01d65f850d595b, type: 3}
   tilePaletteSetter: {fileID: 3060440879821035624}
-  coinSpriteStateTime: 0.3
+  coinSpriteStateTime: 0.1
   spriteRenderer: {fileID: 5303345617331064472}
 --- !u!114 &3060440879821035624
 MonoBehaviour:

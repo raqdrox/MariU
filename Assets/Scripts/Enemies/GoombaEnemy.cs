@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Athena.Mario.Misc;
 using FrostyScripts.Misc;
+using DG.Tweening;
 
 namespace Athena.Mario.Enemies
 {
@@ -20,6 +21,10 @@ namespace Athena.Mario.Enemies
 
         [SerializeField] private HitHandler hitHandler;
         [SerializeField] private List<HitData> currentHits;
+
+        private Sequence moveSequenceAnim;
+        [SerializeField] float animSpeed = 0.2f;
+        [SerializeField] private Sprite squashedSprite;
 
         //TODO : Separate Concerns
         private bool CheckForHorizontalHit()
@@ -112,11 +117,13 @@ namespace Athena.Mario.Enemies
             if (hitHandler == null)
                 hitHandler = GetComponent<HitHandler>();
             MoveDirection = Direction.RIGHT;
+            MoveAnimation();
         }
 
         private void Move()
         {
             rb.velocity = HitHandler.DirectionMap[MoveDirection] * moveSpeed;
+
         }
 
         private void FixedUpdate()
@@ -128,7 +135,39 @@ namespace Athena.Mario.Enemies
                 if(!topHit)
                     CheckForHorizontalHit();
                 Move();
+
             }
+        }
+
+        void MoveAnimation()
+        {
+            moveSequenceAnim = DOTween.Sequence()
+                .AppendCallback(() =>
+                {
+                    spriteRenderer.flipX = MoveDirection == Direction.LEFT;
+                })
+                .AppendInterval(animSpeed)
+                .AppendCallback(() =>
+                {
+                    spriteRenderer.flipX = MoveDirection == Direction.RIGHT;
+                })
+                .AppendInterval(animSpeed)
+                .SetLoops(-1)
+                .Play();
+        }
+
+        
+protected override IEnumerator SquashDeath(bool dir = false)
+
+        {
+            SetSquashSprite();
+            yield return StartCoroutine(base.SquashDeath(dir));
+        }
+        
+        void SetSquashSprite()
+        {
+            moveSequenceAnim.Kill();
+            spriteRenderer.sprite = squashedSprite;
         }
     }
 }

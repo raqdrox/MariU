@@ -29,15 +29,16 @@ bool isfinite(Gradient g)
 }
 
 
-void ReplacePalette_float(float4 Color1, float4 Color2, float4 Color3, float4 Color4,float Color1Mask, float Color2Mask, float Color3Mask, float Color4Mask, out float4 ReplacedPixels,out float Alpha)
+void ReplacePalette_float(float4 Color1, float4 Color2, float4 Color3, float4 Color4,float4 Color5,float Color1Mask, float Color2Mask, float Color3Mask, float Color4Mask,float Color5Mask, out float4 ReplacedPixels,out float Alpha)
         {
             float4 C1Pixels = Color1 * Color1Mask;
             float4 C2Pixels = Color2 * Color2Mask;
             float4 C3Pixels = Color3 * Color3Mask;
             float4 C4Pixels = Color4 * Color4Mask;
-            float4 CombinedPixels = C1Pixels + C2Pixels + C3Pixels + C4Pixels;
+            float4 C5Pixels = Color5 * Color5Mask;
+            float4 CombinedPixels = C1Pixels + C2Pixels + C3Pixels + C4Pixels+C5Pixels;
 
-            Alpha = Color1.a * Color1Mask + Color2.a * Color2Mask + Color3.a * Color3Mask + Color4.a * Color4Mask;
+            Alpha = Color1.a * Color1Mask + Color2.a * Color2Mask + Color3.a * Color3Mask + Color4.a * Color4Mask + Color5.a*Color5Mask;
             
 
             ReplacedPixels = CombinedPixels;
