@@ -145,7 +145,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6365764825091029810}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8f373f19c7c3687daf6e2a2c8a2cc10, type: 3}
   m_Name: 
@@ -194,3 +194,4 @@ MonoBehaviour:
   currentActiveVariant: overworld
   paletteMaterial: {fileID: -876546973899608171, guid: 65008085069827448b8d78e64dd70543, type: 3}
   tileRenderer: {fileID: 2865748391882008353}
+  overrideStagePalette: 0

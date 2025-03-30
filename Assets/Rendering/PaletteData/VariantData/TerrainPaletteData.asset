@@ -18,6 +18,6 @@ MonoBehaviour:
   - name: underground
     paletteId: 2
   - name: castle
-    paletteId: 8
+    paletteId: 5
   - name: water
     paletteId: 0

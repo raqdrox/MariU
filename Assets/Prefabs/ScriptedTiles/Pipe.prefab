@@ -132,7 +132,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -181,6 +181,7 @@ MonoBehaviour:
   currentActiveVariant: overworld
   paletteMaterial: {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
   tileRenderer: {fileID: 3463382759042975074}
+  overrideStagePalette: 0
 --- !u!1 &7115255472585979296
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +415,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -463,3 +464,4 @@ MonoBehaviour:
   currentActiveVariant: overworld
   paletteMaterial: {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
   tileRenderer: {fileID: 411287421982370984}
+  overrideStagePalette: 0

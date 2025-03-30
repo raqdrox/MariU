@@ -7,10 +7,12 @@ using System;
 namespace Athena.Mario.Enemies
 {
     
-    public abstract class Enemy : MonoBehaviour, IPopable
+    public abstract class Enemy : MonoBehaviour, IPopable, IShootable
     {//TODO : Refactor Base Class
         [SerializeField] protected bool isActive;
         [SerializeField] protected Transform activationPoint;
+        [SerializeField] protected bool isShootable = true;
+
 
         protected Rigidbody2D rb;
         protected SpriteRenderer spriteRenderer;
@@ -76,6 +78,12 @@ namespace Athena.Mario.Enemies
             yield return new WaitUntil(() => spriteRenderer.isVisible == false);
 
             Destroy(gameObject);
+        }
+
+        public virtual void GetShot(bool dir)
+        {
+            if (isShootable)
+                GetPopped(dir);
         }
     }
 }

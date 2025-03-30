@@ -5,6 +5,7 @@ using Athena.Mario.Items;
 using Athena.Mario.Player;
 using Athena.Mario.Entities;
 using DG.Tweening;
+using Athena.Mario.RenderScripts;
 
 namespace Athena.Mario.Tiles
 {
@@ -36,10 +37,24 @@ namespace Athena.Mario.Tiles
         
         Vector3 blockIdlePos;
 
+        [SerializeField] bool staticSprite = false;
+
+        Sequence idleSequence;
+        [SerializeField] float animSpeed = 0.2f;
+
+        [SerializeField] TilePaletteSetter paletteSetter;
+
         private void Awake()
         {
             blockIdlePos = transform.position;
+            if (paletteSetter == null)
+                paletteSetter = GetComponent<TilePaletteSetter>();
+            if (spriteRenderer == null)
 
+                spriteRenderer = GetComponent<SpriteRenderer>();
+
+            if (!staticSprite)
+                IdleAnimation();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -127,14 +142,48 @@ namespace Athena.Mario.Tiles
 
         void SetBlockUsed()
         {
-
+            idleSequence?.Kill();
             isCollected = true;
             //TODO: Add Used Sprite
             //animator.SetBool("isUsed", true);
             ResetBlockPos();
             spriteRenderer.sprite = UsedSprite;
+            
         }
 
         void ResetBlockPos() => transform.position = blockIdlePos;
+
+        void IdleAnimation()
+        {
+            if (staticSprite)
+                return;
+
+            string varientName = paletteSetter.GetPaletteVariantName();
+            idleSequence = DOTween.Sequence()            
+                .AppendCallback(() =>
+                {
+                    paletteSetter.SetVariant(varientName + "1");
+                })
+                .AppendInterval(animSpeed)
+                .AppendCallback(() =>
+                {
+                    paletteSetter.SetVariant(varientName + "2");
+                
+                })
+                .AppendInterval(animSpeed)
+                .AppendCallback(() =>
+                {
+                    paletteSetter.SetVariant(varientName + "3");
+                
+                })
+                .AppendInterval(animSpeed)
+                .AppendCallback(() =>
+                {
+                    paletteSetter.SetVariant(varientName + "4");
+                })
+                .AppendInterval(animSpeed)
+                .SetLoops(-1)
+                .Play();
+        }
     }
 }

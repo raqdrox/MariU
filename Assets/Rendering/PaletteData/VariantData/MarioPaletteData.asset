@@ -17,3 +17,11 @@ MonoBehaviour:
     paletteId: 4
   - name: fire
     paletteId: 6
+  - name: star1
+    paletteId: 6
+  - name: star2
+    paletteId: 6
+  - name: star3
+    paletteId: 6
+  - name: star4
+    paletteId: 6

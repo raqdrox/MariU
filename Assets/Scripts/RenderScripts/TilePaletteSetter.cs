@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Athena.Mario.GameManagers.Stage;
 
 namespace Athena.Mario.RenderScripts
 {
@@ -9,15 +10,24 @@ namespace Athena.Mario.RenderScripts
     {
         [SerializeField] Renderer tileRenderer;
 
+        private StageStateManager stageStateManager;
+
+        [SerializeField] private bool overrideStagePalette=false;
+
         
         override protected void Awake()
         {
             tileRenderer.material=Instantiate(paletteMaterial);
             base.Awake();
-            InitPalette();
+            stageStateManager = FindObjectOfType<StageStateManager>();
             
         }
 
+        protected void Start(){
+
+            currentActiveVariant=overrideStagePalette?currentActiveVariant:stageStateManager?.StageType.ToString();
+            InitPalette();
+        }
 
         override public void InitPalette(){
             SetVariant(currentActiveVariant);

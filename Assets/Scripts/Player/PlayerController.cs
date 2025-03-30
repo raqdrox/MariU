@@ -76,6 +76,10 @@ namespace Athena.Mario.Player
         public bool IsInvincible { get => isInvincible; set => isInvincible = value; }
         public PowerEffects ActiveEffect { get => activeEffect; set => activeEffect = value; }
 
+     
+
+
+
         private void Awake()
         {
             instance = this;
@@ -105,7 +109,7 @@ namespace Athena.Mario.Player
                 onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLength, groundMask) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundMask);
                 if (Input.GetButtonDown("Jump"))
                     jumpTimer = Time.time + jumpDelay;
-                isSprinting = Input.GetKey(KeyCode.LeftShift);
+                isSprinting = Input.GetKey("x");
                 direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             }
         }
@@ -155,6 +159,15 @@ namespace Athena.Mario.Player
             jumpTimer = 0;
         }
 
+         public void Bounce(float? force)
+    {
+        rb.velocity = new Vector2(rb.velocity.x, 0);
+        if (force != null)
+            rb.AddForce(Vector2.up * force.Value, ForceMode2D.Impulse);
+        else
+            rb.AddForce(Vector2.up * bounceForce, ForceMode2D.Impulse);
+    }
+
         private void ModifyPhysics()
         {
             if (onGround)
@@ -183,6 +196,7 @@ namespace Athena.Mario.Player
                 }
             }
         }
+        
 
         private void Flip()
         {
@@ -220,11 +234,13 @@ namespace Athena.Mario.Player
             ResetRenderer(bigMarioRenderer);
             ResetRenderer(fireMarioRenderer);
             ResetRenderer(deadMarioRenderer);
+            
         }
 
         private void ResetRenderer(SpriteRenderer renderer)
         {
             renderer.color = Color.white;
+
         }
 
         private void OnValidate()
@@ -271,4 +287,6 @@ namespace Athena.Mario.Player
             }
         }
     }
+
+   
 }

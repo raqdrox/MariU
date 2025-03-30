@@ -98,7 +98,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2576628459468615455}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: fa2c3214ff11ceb488ae3bd92a2baa29, type: 2}
   m_CullingMode: 0
@@ -125,6 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 1
   activationPoint: {fileID: 0}
+  isShootable: 1
   deadAnimName: Dead
   moveDirection: 3
   moveSpeed: 3
@@ -191,7 +192,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0003862381, y: -0.09103453}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -202,7 +203,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.96, y: 0.96}
+  m_Size: {x: 0.90501595, y: 0.7814076}
   m_EdgeRadius: 0
 --- !u!114 &1994321830
 MonoBehaviour:
@@ -219,7 +220,7 @@ MonoBehaviour:
   raycastValuesList: {fileID: 11400000, guid: 196c1da546a8e2540b2c5e2b8e6b9338, type: 2}
   detectLayer:
     serializedVersion: 2
-    m_Bits: 3648
+    m_Bits: 3776
   terrainLayer:
     serializedVersion: 2
     m_Bits: 2112
@@ -232,13 +233,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2576628459468615455}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8f373f19c7c3687daf6e2a2c8a2cc10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   emissiveIntensity: 1
   paletteData: {fileID: 11400000, guid: 4f032ecd67de1a5c1bd566e07792552c, type: 2}
-  currentActiveVariant: overworld
+  currentActiveVariant: UNDERGROUND
   paletteMaterial: {fileID: -876546973899608171, guid: 65008085069827448b8d78e64dd70543, type: 3}
   tileRenderer: {fileID: 2576628459468615453}
+  overrideStagePalette: 0

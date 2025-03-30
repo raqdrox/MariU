@@ -43,7 +43,7 @@ namespace Athena.Mario.Enemies
         [SerializeField] private KoopaState state;
         private Coroutine squashedEnumerator;
         
-
+        private bool checkVertical=true;
         protected override void Awake()
         {
             base.Awake();
@@ -203,6 +203,7 @@ namespace Athena.Mario.Enemies
         
         private bool CheckForVerticalHit()
         { 
+            if (!checkVertical) return false;
             //TODO : Reimplement Hit Check
             var hList = currentHits.FindAll(x => x.hitSide == Direction.TOP || x.hitSide == Direction.DOWN);
 
@@ -225,19 +226,49 @@ namespace Athena.Mario.Enemies
             }
             else
             {
-                switch (hitDir)
+                if(hitDir == Direction.TOP)
                 {
-                    case Direction.TOP:
-                        plrHit.BounceOff();
-                        GetSquashed(false);
-                        break;
-                    default:
-                        plrHit.GetHit();
-                        return true;
+                    switch (State)
+                    {
+                        case KoopaState.KOOPA_NORMAL:
+                            plrHit.BounceOff();
+                            GetSquashed(false);
+                            break;
+                        case KoopaState.KOOPA_SQUASHED:
+                            State = KoopaState.KOOPA_SLIDING;
+                            // get hit side horizontal
+                            var hitSide = plrHit.transform.position.x > transform.position.x ? Direction.RIGHT : Direction.LEFT;
+                            MoveDirection = hitSide==Direction.RIGHT?Direction.LEFT:Direction.RIGHT;
+                            
+                            checkVertical = false;
+                            StartCoroutine(SlideStartCooldown());
+
+                            break;
+                        case KoopaState.KOOPA_SLIDING:
+                            plrHit.BounceOff();
+                            GetSquashed(false);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+                else
+                {
+                    plrHit.GetHit();
                 }
             }
 
             return true;
+        }
+
+
+        private IEnumerator SlideStartCooldown()
+        {
+            yield return new WaitForSeconds(1f);
+            checkVertical = true;
+            
+
+            
         }
 
         protected override void GetSquashed(bool hitRight)

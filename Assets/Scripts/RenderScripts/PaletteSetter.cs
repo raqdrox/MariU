@@ -13,7 +13,7 @@ namespace Athena.Mario.RenderScripts
         public string name;
         public int paletteId;
     }
-[ExecuteInEditMode]
+// [ExecuteInEditMode]
     public abstract class PaletteSetter : MonoBehaviour
     {
         protected PaletteManager _paletteManager;
@@ -46,15 +46,11 @@ namespace Athena.Mario.RenderScripts
         }
         
         virtual public void SetPaletteColors(List<Color> paletteColors,Renderer renderer){
-           
- 
-
             renderer.material.SetColor("_Color1", paletteColors[0]);
             renderer.material.SetColor("_Color2", paletteColors[1]);
             renderer.material.SetColor("_Color3", paletteColors[2]);
             renderer.material.SetColor("_Color4", paletteColors[3]);
             renderer.material.SetColor("_Color5", paletteColors[4]);
-            
         }
 
 
@@ -65,6 +61,13 @@ namespace Athena.Mario.RenderScripts
                 renderer.material.SetVector("_EmissionColor", Color.white * intensity);
             }
 
+        }
+
+        public List<Color> GetPaletteColorsFromVariant(string variantName){
+            var variant= paletteData.GetPaletteVariant(variantName);
+            if(variant.name=="invalid") return null;
+            var paletteColors=_paletteManager?.GetPaletteColors(variant.paletteId);
+            return paletteColors;
         }
   }
 }

@@ -84,7 +84,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,16 +123,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3222160254276421195}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8f373f19c7c3687daf6e2a2c8a2cc10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   emissiveIntensity: 1
-  paletteData: {fileID: 11400000, guid: 20234f33638911b9cbc1c9ce0f4c10b6, type: 2}
-  currentActiveVariant: overworld
+  paletteData: {fileID: 11400000, guid: d12cfb5aac606ba6c9cb95cab7617614, type: 2}
+  currentActiveVariant: UNDERGROUND
   paletteMaterial: {fileID: 2100000, guid: 13275abffc45c8fabbe9b6ac575745bc, type: 2}
   tileRenderer: {fileID: 3222160254276420020}
+  overrideStagePalette: 0
 --- !u!1 &3813937935020149388
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,10 +188,13 @@ MonoBehaviour:
   UsedSprite: {fileID: 21300006, guid: 855dc7396df3c4e49ac4d21234eac5e1, type: 3}
   ItemSpawnPoint: {fileID: 3222160253147664490}
   spriteRenderer: {fileID: 3222160254276420020}
-  SpawnItemType: 4
+  SpawnItemType: 0
   Spawnables: {fileID: 11400000, guid: 16d37db2582cacd49afa85e87de44b59, type: 2}
   itemSpawnTime: 0.6
   spawnStartPosOffset: {x: 0, y: 0.5, z: 0}
+  staticSprite: 0
+  animSpeed: 0.2
+  paletteSetter: {fileID: 2022157059}
 --- !u!50 &3813937935020149427
 Rigidbody2D:
   serializedVersion: 4

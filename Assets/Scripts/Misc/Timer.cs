@@ -9,6 +9,7 @@ namespace FrostyScripts.Misc
     {
         protected float RemainingSeconds;
         public event Action OnTimerEnd;
+        public bool IsTimerActive=true;
 
         protected float _currTime = 0;
 
@@ -17,6 +18,17 @@ namespace FrostyScripts.Misc
             RemainingSeconds = duration;
         }
 
+        public void ResetTimer(float duration)
+        {
+            RemainingSeconds = duration;
+        }
+
+        public void Kill()
+        {
+            IsTimerActive = false;
+            OnTimerEnd = null;
+
+        }
         public void Tick(float deltaTime)
         {
             if(RemainingSeconds == 0f) { return; }
@@ -27,10 +39,13 @@ namespace FrostyScripts.Misc
         private void CheckForTimerEnd()
         {
             if (RemainingSeconds > 0f) { return; }
+            if (IsTimerActive)
+            {
+                IsTimerActive = false;
+                RemainingSeconds = 0f;
 
-            RemainingSeconds = 0f;
-
-            OnTimerEnd?.Invoke();
+                OnTimerEnd?.Invoke();
+            }
         }
 
         

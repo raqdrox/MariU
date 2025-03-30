@@ -131,11 +131,11 @@ namespace Athena.Mario.Player
     
         public void BounceOff()
         {
-            PlayerInstance.rb.AddForce(Vector2.up * PlayerInstance.bounceForce, ForceMode2D.Impulse);
+            PlayerInstance.Bounce(null);
         }
         public void BounceOff(float force)
         {
-            PlayerInstance.rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+            PlayerInstance.Bounce(force);
         }
 
         public void GetHit()
@@ -162,8 +162,9 @@ namespace Athena.Mario.Player
         {
             paletteSetter.SetVariant("base");
 
-            if (PlayerInstance.CurrentPlayerState == PlayerStates.MARIO_SMALL)
+            if (PlayerInstance.CurrentPlayerState == PlayerStates.MARIO_SMALL && PlayerInstance.ActiveEffect==PowerEffects.EFFECT_NONE)
             {
+
                 PlayerInstance.SetPlayerState(PlayerStates.MARIO_DEAD);
                 PlayerDie();
             }
@@ -177,8 +178,6 @@ namespace Athena.Mario.Player
         public void OneUp()
         {
             //gameManager.AddLife();
-            
-
         }
 
     }

@@ -13,7 +13,7 @@ namespace Athena.Mario.RenderScripts
         [SerializeField]private List<PaletteVariant> variantData; 
         
         public PaletteVariant GetPaletteVariant(string variantName){
-            var variant= variantData.Find(x => x.name==variantName);
+            var variant= variantData.Find(x => x.name.ToLower()==variantName.ToLower());
             if(variant.paletteId==0 && variant.name=="")
                 variant.name="invalid";
             return variant;
